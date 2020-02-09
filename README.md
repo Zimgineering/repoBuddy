@@ -14,3 +14,7 @@ Included in repoBuddyRepos.xml are a number of repos, if you do not want any of 
 
 # About SharpSVN
 [SharpSvn](https://sharpsvn.open.collab.net/) is a binding of the Subversion Client API for .Net 2.0-4.0+ applications contained within a set of xcopy-deployable dll's and is licensed under the Apache 2.0 license, to allow using it in both open source and commercial projects 
+
+
+# Special thanks to
+[Kayla D'orden](https://github.com/nt153133)
