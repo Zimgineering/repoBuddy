@@ -19,12 +19,13 @@ namespace repoBuddy
 	{
 		public override string Name => "repoBuddy";
 		public override string Author => "Zimble";
-		public override Version Version => new Version(0, 0, 0, 1);
+		public override Version Version => new Version(0, 0, 0, 2);
 		public override string Description => "Automatically update rb accessories from repositories";
 		public override bool WantButton => true;
 		public override string ButtonText => "Settings";
 		public static DataSet repoDataSet = new DataSet();
 		public static string repoXML = @"Plugins\repoBuddy\repoBuddyRepos.xml";
+		public bool restartNeeded = false;
 		
         private static Color LogColor = Colors.Wheat;
 		public override void OnButtonPress()
@@ -58,6 +59,18 @@ namespace repoBuddy
 				return null;
 			return Assembly.LoadFrom(@"Plugins\repoBuddy\SharpSvn.dll");
 		}
+		private void RestartRebornBuddy()
+		{			
+			AppDomain.CurrentDomain.ProcessExit += new EventHandler(RebornBuddy_Exit);
+			
+			void RebornBuddy_Exit (object sender, EventArgs e)
+			{
+				Process.Start("rebornbuddy", "-a"); //autologin using stored key
+			}
+			
+			Process process = Process.GetCurrentProcess();
+			process.CloseMainWindow();
+		}
 		#region repo logic
 		public void repoStart()
 		{
@@ -82,8 +95,7 @@ namespace repoBuddy
 				currentLap = stopwatch.ElapsedMilliseconds;
 				
 				using (SvnClient client = new SvnClient())
-				{
-					
+				{		
 					if (System.IO.Directory.Exists($@"{repoPath}\.svn"))
 					{
 						SvnInfoEventArgs remoteRev;
@@ -98,20 +110,31 @@ namespace repoBuddy
 							client.Update(repoPath);
 							totalLap = stopwatch.ElapsedMilliseconds - currentLap;
 							Logging.Write(LogColor, $"[{Name}] updated [{repoType}] {repoName} from {localRev.Revision} to {remoteRev.Revision} in {totalLap} ms.");
+							if (repoType != "Profiles")
+							{
+								restartNeeded = true;
+							}
 						}
-
 					}
 					else
 					{
 						client.CheckOut(new Uri(repoUrl), repoPath);
 						totalLap = stopwatch.ElapsedMilliseconds - currentLap;
 						Logging.Write(LogColor, $"[{Name}] {repoName} checkout complete in {totalLap} ms.");
+						if (repoType != "Profiles")
+						{
+							restartNeeded = true;
+						}
 					}
 				}
-
 			});
 			stopwatch.Stop();
 			Logging.Write(LogColor, $"[{Name}] processes complete in {stopwatch.ElapsedMilliseconds} ms.");
+			if (restartNeeded)
+			{
+				Logging.Write(LogColor, $"[{Name}] Restarting to reload assemblies.");
+				RestartRebornBuddy();
+			}
 		}
 		#endregion
 	}
