@@ -236,7 +236,7 @@ namespace repoBuddy
 		private void PopulateDataGridView()
 		{
 			repoDataGridView.DataSource = repoDataSet;
-			repoDataGridView.DataMember = "repo";
+			repoDataGridView.DataMember = "Repo";
 		}
 		public Form1()
 		{

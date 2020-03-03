@@ -6,7 +6,8 @@ Included in repoBuddyRepos.xml are a number of repos, if you do not want any of 
 1. download using your preferred method or [HERE](https://github.com/Zimgineering/repoBuddy/archive/master.zip)
 2. extract the archive into your plugins directory (remove -master from the folder name if necessary)
     > should look like this: Rebornbuddy/Plugins/repoBuddy/sharpSVN.dll
-3. enable repoBuddy in your plugins section and restart rebornbuddy when the process is complete for changes to take effect
+3. Delete any old repositories that might be in the included repoBuddyRepos.xml to prevent errors and namespace conflicts
+4. enable repoBuddy in your plugins section ~~and restart rebornbuddy when the process is complete for changes to take effect~~ v0.0.0.2 forces a restart after a botbase/plugin/routine gets updated.
 
 ![](Images/repoBuddyGUI.png)
 ![](Images/repoBuddyLog.png)
