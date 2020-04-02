@@ -1,39 +1,49 @@
 //!CompilerOption:AddRef:Plugins\repoBuddy\SharpSvn.dll
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.IO;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Forms;
 using System.Windows.Media;
+using Newtonsoft.Json;
 using ff14bot.AClasses;
+using ff14bot.Forms.ugh;
 using ff14bot.Helpers;
 using SharpSvn;
 
+
+
 namespace repoBuddy
 {
-
 	public class repoBuddy : BotPlugin
 	{
 		public override string Name => "repoBuddy";
 		public override string Author => "Zimble";
-		public override Version Version => new Version(0, 0, 0, 2);
+		public override Version Version => new Version(1,0,0,4);
 		public override string Description => "Automatically update rb accessories from repositories";
 		public override bool WantButton => true;
 		public override string ButtonText => "Settings";
 		public static DataSet repoDataSet = new DataSet();
 		public static string repoXML = @"Plugins\repoBuddy\repoBuddyRepos.xml";
+		private static Color LogColor = Colors.Wheat;
 		public bool restartNeeded = false;
-		
-        private static Color LogColor = Colors.Wheat;
+		public static List<String> repoLog = new List<String>();
+
 		public override void OnButtonPress()
 		{
 			CreateSettingsForm();
 		}
 		public override void OnEnabled()
 		{
+			Thread waitThread = new Thread(WaitForDone);
+            waitThread.Start();
 			Logging.Write(LogColor, $"[{Name}] checking for updates");
 			GetrepoData();
 			repoStart();
@@ -71,6 +81,86 @@ namespace repoBuddy
 			Process process = Process.GetCurrentProcess();
 			process.CloseMainWindow();
 		}
+		public void WriteLog(List<String> array, String msg)
+		{
+			array.Add(msg);
+			Logging.Write(LogColor, msg);
+		}
+		#region rebornbuddy init thread logic
+        public static bool IsDone()
+        {
+            var asm = Assembly.GetAssembly(typeof(MainWpf));
+            var type = asm.GetType("ff14bot.Forms.ugh.MainWpf");
+            var props = type.GetField("btnStart", BindingFlags.NonPublic | BindingFlags.Instance);
+            System.Windows.Controls.Button btnStart = (System.Windows.Controls.Button) props.GetValue(MainWpf.current);
+            bool result = false;
+            btnStart.Dispatcher.Invoke(() => { result = btnStart.IsEnabled; });
+
+            return result;
+        }
+		public static async void WaitForDone()
+        {
+            await WaitUntil(IsDone, 100, 60000);
+
+            if (IsDone())
+            {
+                System.Timers.Timer logwatch = new System.Timers.Timer();
+                logwatch.Interval = 3000;
+                logwatch.AutoReset = true;
+                logwatch.Enabled = true;
+                logwatch.Elapsed += new System.Timers.ElapsedEventHandler(OnTimedEvent);
+                Logging.OnLogMessage += new Logging.LogMessageDelegate(RestartTimer);
+                void RestartTimer (ReadOnlyCollection<Logging.LogMessage> message)
+                {
+					logwatch.Stop();
+					logwatch.Start();
+                }
+                void OnTimedEvent (object o, System.Timers.ElapsedEventArgs e)
+                {
+					Logging.OnLogMessage -= RestartTimer;
+					logwatch.Elapsed -= OnTimedEvent;
+					logwatch.Stop();
+					logwatch.Dispose();
+
+					using (StreamReader file = File.OpenText(@"Plugins\repoBuddy\repoLog.json"))
+					{
+						JsonSerializer serializer = new JsonSerializer();
+						repoLog = (List<String>)serializer.Deserialize(file, typeof(List<String>));
+						
+						foreach (string change in repoLog)
+						{
+							Logging.Write(LogColor, change);
+						}
+					}
+					using (StreamWriter file = File.CreateText(@"Plugins\repoBuddy\repoLog.json"))
+					{
+						JsonSerializer serializer = new JsonSerializer();
+						repoLog.Clear();
+						serializer.Serialize(file, repoLog);
+					}					
+                }
+            }
+            else
+            {
+                Logging.Write(LogColor, $"Timed out");
+            }
+        }
+        public static async Task WaitUntil(Func<bool> condition, int frequency = 25, int timeout = -1)
+        {
+            var waitTask = Task.Run(async () =>
+            {
+                while (!condition())
+                {
+                    await Task.Delay(frequency);
+                }
+            });
+
+            if (waitTask != await Task.WhenAny(waitTask, Task.Delay(timeout)))
+            {
+                throw new TimeoutException();
+            }
+        }
+		#endregion
 		#region repo logic
 		public void repoStart()
 		{
@@ -81,8 +171,6 @@ namespace repoBuddy
 
 			Stopwatch stopwatch = Stopwatch.StartNew();
 
-			//List<DataRow> test = repoDataSet.Tables["Repo"].Rows.Cast<DataRow>();
-			//foreach (DataRow row in repoDataSet.Tables["Repo"].Rows)
 			Parallel.ForEach(repoDataSet.Tables["Repo"].Rows.Cast<DataRow>(), row =>
 			{
 				string repoName = row[0].ToString();
@@ -109,7 +197,7 @@ namespace repoBuddy
 							client.Revert(repoPath, revertArgs);
 							client.Update(repoPath);
 							totalLap = stopwatch.ElapsedMilliseconds - currentLap;
-							Logging.Write(LogColor, $"[{Name}] updated [{repoType}] {repoName} from {localRev.Revision} to {remoteRev.Revision} in {totalLap} ms.");
+							WriteLog(repoLog, $"[{Name}] updated [{repoType}] {repoName} from {localRev.Revision} to {remoteRev.Revision} in {totalLap} ms.");
 							if (repoType != "Profiles")
 							{
 								restartNeeded = true;
@@ -120,7 +208,7 @@ namespace repoBuddy
 					{
 						client.CheckOut(new Uri(repoUrl), repoPath);
 						totalLap = stopwatch.ElapsedMilliseconds - currentLap;
-						Logging.Write(LogColor, $"[{Name}] {repoName} checkout complete in {totalLap} ms.");
+						WriteLog(repoLog, $"[{Name}] {repoName} checkout complete in {totalLap} ms.");
 						if (repoType != "Profiles")
 						{
 							restartNeeded = true;
@@ -130,6 +218,15 @@ namespace repoBuddy
 			});
 			stopwatch.Stop();
 			Logging.Write(LogColor, $"[{Name}] processes complete in {stopwatch.ElapsedMilliseconds} ms.");
+
+			if (repoLog.Count > 0)
+			{
+				using (StreamWriter file = File.CreateText(@"Plugins\repoBuddy\repoLog.json"))
+				{
+					JsonSerializer serializer = new JsonSerializer();
+					serializer.Serialize(file, repoLog);
+				}
+			}
 			if (restartNeeded)
 			{
 				Logging.Write(LogColor, $"[{Name}] Restarting to reload assemblies.");

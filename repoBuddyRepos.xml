@@ -1,6 +1,11 @@
 <?xml version="1.0" standalone="yes"?>
 <ReposTable>
   <Repo>
+    <Name>repoBuddy</Name>
+    <Type>Plugin</Type>
+    <URL>https://github.com/Zimgineering/repoBuddy.git/trunk</URL>
+  </Repo>
+  <Repo>
     <Name>Sodimm</Name>
     <Type>Profile</Type>
     <URL>https://github.com/sodimm/RebornBuddy.git/trunk/Profiles/Sodimm</URL>
@@ -51,7 +56,7 @@
     <URL>https://github.com/nt153133/LlamaLibrary.git/trunk</URL>
   </Repo>
   <Repo>
-    <Name>Angles24-DoH80-DoL80</Name>
+    <Name>Angles24/DoH80-DoL80</Name>
     <Type>Profile</Type>
     <URL>https://github.com/Angles24/DoH80-DoL80.git/trunk</URL>
   </Repo>

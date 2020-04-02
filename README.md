@@ -1,13 +1,18 @@
 # repoBuddy
-A plugin for the RebornBuddy MMO bot to automatically update accessories from repositories.
+A plugin for the RebornBuddy FFXIV MMO bot to automatically update accessories from repositories.
 
-Included in repoBuddyRepos.xml are a number of repos, if you do not want any of those then remove the relevant data in the xml (using a text editor) before enabling.
+Included in repoBuddyRepos.xml are a number of commonly used repos, if you do not want any of those then remove the relevant data in the xml (using a text editor) or using the settings button before enabling.
 # Installation
-1. download using your preferred method or [HERE](https://github.com/Zimgineering/repoBuddy/archive/master.zip)
-2. extract the archive into your plugins directory (remove -master from the folder name if necessary)
+1. Download using your preferred method or [HERE](https://github.com/Zimgineering/repoBuddy/archive/master.zip)
+2. Extract the archive into your plugins directory (remove -master from the folder name if necessary)
     > should look like this: Rebornbuddy/Plugins/repoBuddy/sharpSVN.dll
 3. Delete any old repositories that might be in the included repoBuddyRepos.xml to prevent errors and namespace conflicts
-4. enable repoBuddy in your plugins section ~~and restart rebornbuddy when the process is complete for changes to take effect~~ v0.0.0.2 forces a restart after a botbase/plugin/routine gets updated.
+4. Enable repoBuddy in your plugins section ~~and restart rebornbuddy when the process is complete for changes to take effect~~ v0.0.0.2+ forces a restart after a botbase/plugin/routine gets updated.
+
+# Warnings
+* You will lose local changes to files when an update is processed, but unversioned files should not be lost.
+* If you run into any issues please try a clean checkout by either deleting the repo folder or the hidden .svn folder and restarting RebornBuddy
+
 
 ![](Images/repoBuddyGUI.png)
 ![](Images/repoBuddyLog.png)
