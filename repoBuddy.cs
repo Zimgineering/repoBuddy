@@ -56,6 +56,11 @@ namespace repoBuddy
 		}
 		public void GetrepoData()
 		{
+			if (!File.Exists(@"Plugins\repoBuddy\repoBuddyRepos.xml"))
+			{
+				File.Copy(@"Plugins\repoBuddy\Default.repoBuddyRepos.xml", @"Plugins\repoBuddy\repoBuddyRepos.xml");
+			}
+			
 			repoDataSet.Clear();
 			repoDataSet.ReadXml(repoXML);
 		}
