@@ -26,7 +26,7 @@ namespace repoBuddy
 	{
 		public override string Name => "repoBuddy";
 		public override string Author => "Zimble";
-		public override Version Version => new Version(1,0,0,4);
+		public override Version Version => new Version(1,0,0,5);
 		public override string Description => "Automatically update rb accessories from repositories";
 		public override bool WantButton => true;
 		public override string ButtonText => "Settings";
@@ -38,6 +38,7 @@ namespace repoBuddy
 
 		public override void OnButtonPress()
 		{
+			GetrepoData();
 			CreateSettingsForm();
 		}
 		public override void OnEnabled()
