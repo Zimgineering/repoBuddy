@@ -5,8 +5,9 @@ Included in repoBuddyRepos.xml are a number of commonly used repos, if you do no
 # Installation
 SharpSvn requires Microsoft Visual C++ 2010 SP1 Redistributable Package to function, download [HERE (64-bit)](https://www.microsoft.com/en-us/download/details.aspx?id=13523)
 1. Download using your preferred method or [HERE](https://github.com/Zimgineering/repoBuddy/archive/master.zip)
+    >make sure to unblock the file (properties->unblock checkbox)
 2. Extract the archive into your plugins directory (remove -master from the folder name if necessary)
-    > should look like this: Rebornbuddy/Plugins/repoBuddy/sharpSVN.dll
+    >should look like this: Rebornbuddy/Plugins/repoBuddy/sharpSVN.dll
 3. Delete any old repositories that might be in the included repoBuddyRepos.xml to prevent errors and namespace conflicts
 4. Enable repoBuddy in your plugins section ~~and restart rebornbuddy when the process is complete for changes to take effect~~ v0.0.0.2+ forces a restart after a botbase/plugin/routine gets updated.
 
