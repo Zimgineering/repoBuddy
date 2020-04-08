@@ -3,7 +3,7 @@ A plugin for the RebornBuddy FFXIV MMO bot to automatically update accessories f
 
 Included in repoBuddyRepos.xml are a number of commonly used repos, if you do not want any of those then remove the relevant data in the xml (using a text editor) or using the settings button before enabling.
 # Installation
-SharpSvn requires Microsoft Visual C++ 2010 SP1 Redistributable Package to function, download [32-bit](https://www.microsoft.com/en-us/download/details.aspx?id=8328) or [64-bit](https://www.microsoft.com/en-us/download/details.aspx?id=13523)
+SharpSvn requires Microsoft Visual C++ 2010 SP1 Redistributable Package to function, download [HERE (64-bit)](https://www.microsoft.com/en-us/download/details.aspx?id=13523)
 1. Download using your preferred method or [HERE](https://github.com/Zimgineering/repoBuddy/archive/master.zip)
 2. Extract the archive into your plugins directory (remove -master from the folder name if necessary)
     > should look like this: Rebornbuddy/Plugins/repoBuddy/sharpSVN.dll
