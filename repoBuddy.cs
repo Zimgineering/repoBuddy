@@ -24,7 +24,12 @@ namespace repoBuddy
 {
 	public class repoBuddy : BotPlugin
 	{
+#if RB_CN
+		public override string Name => "RB 资源更新器";
+#else
 		public override string Name => "repoBuddy";
+#endif		
+
 		public override string Author => "Zimble";
 		public override Version Version => new Version(1,0,0,5);
 		public override string Description => "Automatically update rb accessories from repositories";
