@@ -24,14 +24,14 @@ namespace repoBuddy
 {
 	public class repoBuddy : BotPlugin
 	{
-#if RB_CN
+		#if RB_CN
 		public override string Name => "RB 资源更新器";
-#else
+		#else
 		public override string Name => "repoBuddy";
-#endif		
+		#endif		
 
 		public override string Author => "Zimble";
-		public override Version Version => new Version(1,0,0,5);
+		public override Version Version => new Version(1,0,0,6);
 		public override string Description => "Automatically update rb accessories from repositories";
 		public override bool WantButton => true;
 		public override string ButtonText => "Settings";
@@ -197,17 +197,34 @@ namespace repoBuddy
 				{		
 					if (System.IO.Directory.Exists($@"{repoPath}\.svn"))
 					{
+						Collection<SvnLogEventArgs> logitems;
+
 						SvnInfoEventArgs remoteRev;
 						client.GetInfo(repoUrl, out remoteRev);
 
 						SvnInfoEventArgs localRev;
 						client.GetInfo(repoPath, out localRev);
 						
+						SvnLogArgs logArgs = new SvnLogArgs()
+						{
+							Start = localRev.Revision,
+							End = remoteRev.Revision
+						};
+						
 						if (localRev.Revision < remoteRev.Revision) 
 						{
 							client.Revert(repoPath, revertArgs);
 							client.Update(repoPath);
 							totalLap = stopwatch.ElapsedMilliseconds - currentLap;
+
+							client.GetLog(repoPath, logArgs, out logitems);
+
+							foreach (var logentry in logitems)
+							{
+								String logString = logentry.LogMessage.Replace(System.Environment.NewLine, " ");
+								WriteLog(repoLog, $@"[{Name}] {repoName} r{logentry.Revision}: {logString}");
+							}
+
 							WriteLog(repoLog, $"[{Name}] updated [{repoType}] {repoName} from {localRev.Revision} to {remoteRev.Revision} in {totalLap} ms.");
 							if (repoType != "Profiles")
 							{
