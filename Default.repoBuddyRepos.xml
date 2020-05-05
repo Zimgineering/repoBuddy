@@ -60,4 +60,9 @@
     <Type>Profile</Type>
     <URL>https://github.com/Angles24/DoH80-DoL80.git/trunk</URL>
   </Repo>
+  <Repo>
+    <Name>Kombatant</Name>
+    <Type>Botbase</Type>
+    <URL>https://github.com/Fryheit/Kombatant.git/trunk</URL>
+  </Repo>
 </ReposTable>
