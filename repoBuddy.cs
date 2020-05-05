@@ -207,7 +207,7 @@ namespace repoBuddy
 						
 						SvnLogArgs logArgs = new SvnLogArgs()
 						{
-							Start = localRev.Revision,
+							Start = localRev.Revision + 1,
 							End = remoteRev.Revision
 						};
 						
