@@ -1,4 +1,6 @@
 //!CompilerOption:AddRef:Plugins\repoBuddy\SharpSvn.dll
+//!CompilerOption:AddRef:System.IO.Compression.dll
+//!CompilerOption:AddRef:System.IO.Compression.FileSystem.dll
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,6 +20,8 @@ using ff14bot.Forms.ugh;
 using ff14bot.Helpers;
 using SharpSvn;
 
+using System.IO.Compression;
+using System.Net.Http;
 
 
 namespace repoBuddy
@@ -31,7 +35,7 @@ namespace repoBuddy
 		#endif		
 
 		public override string Author => "Zimble";
-		public override Version Version => new Version(1,0,0,6);
+		public override Version Version => new Version(1,0,0,8);
 		public override string Description => "Automatically update rb accessories from repositories";
 		public override bool WantButton => true;
 		public override string ButtonText => "Settings";
@@ -40,10 +44,10 @@ namespace repoBuddy
 		private static Color LogColor = Colors.Wheat;
 		public bool restartNeeded = false;
 		public static List<String> repoLog = new List<String>();
+		public static Dictionary<String, List<String>> ddlDict = new Dictionary<String, List<String>>();
 
 		public override void OnButtonPress()
 		{
-			GetrepoData();
 			CreateSettingsForm();
 		}
 		public override void OnEnabled()
@@ -51,8 +55,12 @@ namespace repoBuddy
 			Thread waitThread = new Thread(WaitForDone);
             waitThread.Start();
 			Logging.Write(LogColor, $"[{Name}] checking for updates");
-			GetrepoData();
 			repoStart();
+		}
+		public override void OnInitialize()
+		{
+			GetrepoData();
+			GetddlData();
 		}
 		public void CreateSettingsForm()
 		{
@@ -69,6 +77,14 @@ namespace repoBuddy
 			repoDataSet.Clear();
 			repoDataSet.ReadXml(repoXML);
 		}
+		public void GetddlData()
+		{
+			using (StreamReader file = File.OpenText(@"Plugins\repoBuddy\ddls.json"))
+			{
+				JsonSerializer serializer = new JsonSerializer();
+				ddlDict = (Dictionary<String, List<String>>)serializer.Deserialize(file, typeof(Dictionary<string, List<string>>));
+			}
+		}
 		static repoBuddy()
 		{
 			AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
@@ -80,7 +96,7 @@ namespace repoBuddy
 				return null;
 			return Assembly.LoadFrom(@"Plugins\repoBuddy\SharpSvn.dll");
 		}
-		private void RestartRebornBuddy()
+		public static void RestartRebornBuddy()
 		{			
 			AppDomain.CurrentDomain.ProcessExit += new EventHandler(RebornBuddy_Exit);
 			
@@ -262,28 +278,85 @@ namespace repoBuddy
 			}
 		}
 		#endregion
+		#region ddl logic
+		public static void DirectDownload(string path, string Url)
+		{
+			var bytes = DownloadLatestVersion(Url).Result;
+			
+			if (bytes == null || bytes.Length == 0)
+			{
+				Logging.Write(LogColor, $"[Error] Bad product data returned.");
+				return;
+			}
+
+			if (!Extract(bytes, path))
+			{
+				Logging.Write(LogColor, $"[Error] Could not extract new files.");
+				return;
+			}
+		}
+		private static bool Extract(byte[] files, string directory)
+		{
+			using (var stream = new MemoryStream(files))
+			{
+				var Zip = new ZipArchive(stream);
+				ZipFileExtensions.ExtractToDirectory(Zip, directory);
+			}
+			
+			return true;
+		}
+		private static async Task<byte[]> DownloadLatestVersion(string Url)
+		{
+			using (var client = new HttpClient())
+			{
+				byte[] responseMessageBytes;
+				try
+				{
+					responseMessageBytes = client.GetByteArrayAsync(Url).Result;
+				}
+				catch (Exception e)
+				{
+					Logging.Write(LogColor, e.Message);
+					return null;
+				}
+
+				return responseMessageBytes;
+			}
+		}
+		#endregion
 	}
 	#region GUI stuff
 	public class Form1 : Form
 	{
 
 		private FlowLayoutPanel controlPanel = new FlowLayoutPanel();
+		private FlowLayoutPanel buttonPanel = new FlowLayoutPanel();
 		private DataGridView repoDataGridView = new DataGridView();
 		private TextBox nameBox = new TextBox();
 		private ComboBox typeBox = new ComboBox();
 		private TextBox urlBox = new TextBox();
 		private Button addNewRowButton = new Button();
 		private Button deleteRowButton = new Button();
+		private Button restartRBButton = new Button();
+		private TabPage repoTab = new TabPage();
+		private	TabPage ddlTab = new TabPage();
+		private TabControl tabControls = new TabControl();
 		private DataSet repoDataSet = repoBuddy.repoDataSet;
 		private string repoXML = repoBuddy.repoXML;
-		private bool styleState = Application.RenderWithVisualStyles;
+		private Dictionary<String, List<String>> ddlDict = repoBuddy.ddlDict;
+
 		private void SetupLayout()
 		{
 			Text = "repoBuddy Settings";
-			Size = new System.Drawing.Size(517, 400);
+			Size = new System.Drawing.Size(525, 400);
 			MaximizeBox = false;
 			MinimizeBox = false;
 			FormBorderStyle = FormBorderStyle.FixedDialog;
+
+			repoTab.Text = "Repositories";
+			repoTab.TabIndex = 0;
+			ddlTab.Text = "One-time Downloads";
+			ddlTab.TabIndex = 1;
 			
 			nameBox.Text = "Repo Name";
 			nameBox.KeyPress += new KeyPressEventHandler(textBox_KeyPress);
@@ -304,6 +377,48 @@ namespace repoBuddy
 
 			deleteRowButton.Text = "Delete Row";
 			deleteRowButton.Click += new EventHandler(DeleteRowButton_Click);
+			
+			restartRBButton.Text = "Restart RebornBuddy";
+			restartRBButton.Click += new EventHandler(restartRBButton_Click);
+			restartRBButton.AutoSize = true;
+			restartRBButton.Width = 495;
+			restartRBButton.FlatStyle = FlatStyle.Flat;
+
+			buttonPanel.Controls.Add(restartRBButton);
+
+			foreach (KeyValuePair<string, List<string>> pair in ddlDict)
+			{
+				string ddlname = pair.Key;
+				string ddlmask = pair.Value[0];
+				string ddluri = pair.Value[1];
+				string ddldesc = pair.Value[2];
+				
+				Button button = new Button();				
+				button.Click += new EventHandler(ddlButton_Click);
+				button.Name = ddlname;
+				button.Text = ddlname + " - " +ddldesc;
+				button.AutoSize = true;
+				button.Width = 495;
+				buttonPanel.Controls.Add(button);
+
+				string resolvedMask;
+
+				if (ddlmask.Contains(ddlname))
+				{
+					resolvedMask = ddlmask;
+				}
+				else
+				{
+					resolvedMask = ddlmask + @"\" + ddlname;
+				}
+
+				if(Directory.Exists(resolvedMask))
+				{
+					button.Text = $"[INSTALLED] {button.Text}";
+					button.Enabled = false;
+				}
+				button.FlatStyle = FlatStyle.Flat;
+			}
 
 			controlPanel.Controls.Add(nameBox);
 			controlPanel.Controls.Add(typeBox);
@@ -313,10 +428,18 @@ namespace repoBuddy
 			controlPanel.AutoSize = true;
 			controlPanel.Dock = DockStyle.Bottom;
 
-
-			Controls.Add(repoDataGridView); //controls have their Dock setting evaluated from the bottom up, so this is first to prevent overlap with control panel
-			Controls.Add(controlPanel);
-
+			buttonPanel.AutoScroll = true;
+			buttonPanel.AutoSize = true;
+			buttonPanel.Dock = DockStyle.Fill;
+			tabControls.Dock = DockStyle.Fill;
+			tabControls.Controls.Add(repoTab);
+			repoTab.Controls.Add(repoDataGridView); //controls have their Dock setting evaluated from the bottom up, so this is first to prevent overlap with control panel
+			repoTab.Controls.Add(controlPanel);
+			
+			tabControls.Controls.Add(ddlTab);
+			ddlTab.Controls.Add(buttonPanel);
+			
+			Controls.Add(tabControls);
 		}
 		private void SetupDataGridView()
 		{
@@ -368,7 +491,6 @@ namespace repoBuddy
 			Load += new EventHandler(Form1_Load);
 			FormClosing += new FormClosingEventHandler(Form1_Unload);
 		}
-
 		private void Form1_Load(object sender, EventArgs e)
 		{
 			SetupLayout();
@@ -461,6 +583,21 @@ namespace repoBuddy
 				repoDataGridView.Rows.RemoveAt(repoDataGridView.SelectedRows[0].Index);
 			}
 		}
+		private void ddlButton_Click(object sender, EventArgs e)
+		{
+			Button button = sender as Button;
+			string path = $@"{ddlDict[button.Name][0]}";
+			string zipUrl = ddlDict[button.Name][1];
+			repoBuddy.DirectDownload(path, zipUrl);
+			button.Text = $"[INSTALLED] {button.Text}";
+			button.Enabled = false;
+		}
+		private void restartRBButton_Click(object sender, EventArgs e)
+		{
+			this.Close();
+			Task.Delay(100).ContinueWith(t=> repoBuddy.RestartRebornBuddy());
+		}
+
 	}
 	#endregion
 }

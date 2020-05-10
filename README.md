@@ -11,6 +11,7 @@ SharpSvn requires Microsoft Visual C++ 2010 SP1 Redistributable Package to funct
     >should look like this: Rebornbuddy/Plugins/repoBuddy/sharpSVN.dll
 3. Delete any old repositories that might be in the included repoBuddyRepos.xml to prevent errors and namespace conflicts
 4. Enable repoBuddy in your plugins section ~~and restart rebornbuddy when the process is complete for changes to take effect~~ v0.0.0.2+ forces a restart after a botbase/plugin/routine gets updated.
+5. Click any of the direct download buttons on the One-Time downloads tab, and once finished click Restart RebornBuddy.
 
 # Included Repos
 
@@ -39,6 +40,7 @@ SharpSvn requires Microsoft Visual C++ 2010 SP1 Redistributable Package to funct
 
 
 ![](Images/repoBuddyGUI.png)
+![](Images/repoBuddyGUI2.png)
 ![](Images/repoBuddyLog.png)
 
 

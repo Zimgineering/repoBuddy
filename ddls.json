@@ -1,0 +1,42 @@
+{
+	"Magitek": [
+		"Routines",
+		"https://cdn.discordapp.com/attachments/332630645849325568/609113079896211543/Magitek.zip",
+		"Formerly Paid combat routine"
+	],
+	"Lisbeth": [
+		"BotBases\\Lisbeth",
+		"https://lisbeth.io/downloads/v52/Lisbeth.zip",
+		"Paid crafting/gathering botbase"
+	],
+	"Arcade": [
+		"BotBases",
+		"https://cdn.discordapp.com/attachments/332630645849325568/571008115500122140/Arcade.zip",
+		"Formerly Paid MGP farmer"
+	],
+	"ATB": [
+		"BotBases",
+		"https://github.com/newb23/atb/releases/download/1.0.0/ATB.zip",
+		"Formerly Paid combat botbase"
+	],
+	"Crawler": [
+		"BotBases",
+		"https://cdn.discordapp.com/attachments/280934636836618240/707431068671803492/Crawler.zip",
+		"Formerly Paid combat botbase, very fast"
+	],
+	"Cyril": [
+		"Plugins",
+		"https://github.com/sodimm/RebornBuddy/raw/master/Downloads/Latest/Cyril/Cyril.zip",
+		"Free repairing alternative"
+	],
+	"Mew": [
+		"Plugins",
+		"https://cdn.discordapp.com/attachments/267059668008960001/681198607411576832/MewShB_2_3_1.zip",
+		"Paid gathering orderbot profile generator"
+	],
+	"DungeonMaster": [
+		"BotBases",
+		"https://auth.titanbots.gg/download/UqejmX9EylR58JiHuPCjAw/latest.zip",
+		"Formerly Paid dungeon running botbase"
+	]
+}
