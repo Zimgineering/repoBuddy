@@ -33,7 +33,6 @@ namespace repoBuddy
 		#else
 		public override string Name => "repoBuddy";
 		#endif		
-
 		public override string Author => "Zimble";
 		public override Version Version => new Version(1,0,0,8);
 		public override string Description => "Automatically update rb accessories from repositories";
@@ -59,6 +58,7 @@ namespace repoBuddy
 		}
 		public override void OnInitialize()
 		{
+
 			GetrepoData();
 			GetddlData();
 		}
@@ -91,11 +91,29 @@ namespace repoBuddy
 		}
 		private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args) //force load sharpsvn
 		{
+			string path = @"Plugins\repoBuddy\SharpSvn.dll";
+			
+			try
+            {
+                Unblock(path);
+            }
+            catch (Exception)
+            {
+                // pass
+            }
 			AssemblyName asmName = new AssemblyName(args.Name);
 			if (asmName.Name != "SharpSvn")
 				return null;
-			return Assembly.LoadFrom(@"Plugins\repoBuddy\SharpSvn.dll");
+			return Assembly.LoadFrom(path);
 		}
+		[System.Runtime.InteropServices.DllImport("kernel32.dll", SetLastError = true)]
+		[return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.Bool)]
+        public static extern bool DeleteFile(string name);
+
+        public static bool Unblock(string fileName)
+        {
+            return DeleteFile(fileName + ":Zone.Identifier");
+        }
 		public static void RestartRebornBuddy()
 		{			
 			AppDomain.CurrentDomain.ProcessExit += new EventHandler(RebornBuddy_Exit);
@@ -127,7 +145,13 @@ namespace repoBuddy
         }
 		public static async void WaitForDone()
         {
-            await WaitUntil(IsDone, 100, 60000);
+			#if RB_CN
+			int timeoutVar = 300000; // 5 minutes
+			#else
+			int timeoutVar = 60000;
+			#endif
+
+            await WaitUntil(IsDone, 100, timeoutVar);
 
             if (IsDone())
             {
