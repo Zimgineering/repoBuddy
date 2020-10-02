@@ -34,7 +34,7 @@ namespace repoBuddy
 		public override string Name => "repoBuddy";
 		#endif		
 		public override string Author => "Zimble";
-		public override Version Version => new Version(1,0,0,8);
+		public override Version Version => new Version(1,0,0,9);
 		public override string Description => "Automatically update rb accessories from repositories";
 		public override bool WantButton => true;
 		public override string ButtonText => "Settings";
@@ -53,7 +53,7 @@ namespace repoBuddy
 		{
 			Thread waitThread = new Thread(WaitForDone);
             waitThread.Start();
-			Logging.Write(LogColor, $"[{Name}] checking for updates");
+			Logging.Write(LogColor, $"[{Name}-{Version}] checking for updates");
 			repoStart();
 		}
 		public override void OnInitialize()
@@ -116,13 +116,14 @@ namespace repoBuddy
         }
 		public static void RestartRebornBuddy()
 		{			
-			AppDomain.CurrentDomain.ProcessExit += new EventHandler(RebornBuddy_Exit);
+			//AppDomain.CurrentDomain.ProcessExit += new EventHandler(RebornBuddy_Exit);
+			//
+			//void RebornBuddy_Exit (object sender, EventArgs e)
+			//{
+			//	Process.Start("rebornbuddy", "-a"); //autologin using stored key
+			//}
 			
-			void RebornBuddy_Exit (object sender, EventArgs e)
-			{
-				Process.Start("rebornbuddy", "-a"); //autologin using stored key
-			}
-			
+			Process.Start(@"Plugins\repoBuddy\watchdog.bat");
 			Process process = Process.GetCurrentProcess();
 			process.CloseMainWindow();
 		}
@@ -262,10 +263,10 @@ namespace repoBuddy
 							foreach (var logentry in logitems)
 							{
 								String logString = logentry.LogMessage.Replace(System.Environment.NewLine, " ");
-								WriteLog(repoLog, $@"[{Name}] {repoName} r{logentry.Revision}: {logString}");
+								WriteLog(repoLog, $@"[{Name}-{Version}] {repoName} r{logentry.Revision}: {logString}");
 							}
 
-							WriteLog(repoLog, $"[{Name}] updated [{repoType}] {repoName} from {localRev.Revision} to {remoteRev.Revision} in {totalLap} ms.");
+							WriteLog(repoLog, $"[{Name}-{Version}] updated [{repoType}] {repoName} from {localRev.Revision} to {remoteRev.Revision} in {totalLap} ms.");
 							if (repoType != "Profiles")
 							{
 								restartNeeded = true;
@@ -276,7 +277,7 @@ namespace repoBuddy
 					{
 						client.CheckOut(new Uri(repoUrl), repoPath);
 						totalLap = stopwatch.ElapsedMilliseconds - currentLap;
-						WriteLog(repoLog, $"[{Name}] {repoName} checkout complete in {totalLap} ms.");
+						WriteLog(repoLog, $"[{Name}-{Version}] {repoName} checkout complete in {totalLap} ms.");
 						if (repoType != "Profiles")
 						{
 							restartNeeded = true;
@@ -285,7 +286,7 @@ namespace repoBuddy
 				}
 			});
 			stopwatch.Stop();
-			Logging.Write(LogColor, $"[{Name}] processes complete in {stopwatch.ElapsedMilliseconds} ms.");
+			Logging.Write(LogColor, $"[{Name}-{Version}] processes complete in {stopwatch.ElapsedMilliseconds} ms.");
 
 			if (repoLog.Count > 0)
 			{
@@ -297,7 +298,7 @@ namespace repoBuddy
 			}
 			if (restartNeeded)
 			{
-				Logging.Write(LogColor, $"[{Name}] Restarting to reload assemblies.");
+				Logging.Write(LogColor, $"[{Name}-{Version}] Restarting to reload assemblies.");
 				RestartRebornBuddy();
 			}
 		}
