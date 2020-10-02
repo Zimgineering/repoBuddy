@@ -427,7 +427,7 @@ namespace repoBuddy
 
 				string resolvedMask;
 
-				if (ddlmask.Contains(ddlname))
+				if (ddlmask.Contains(ddlname.Replace("-CN", "")))
 				{
 					resolvedMask = ddlmask;
 				}
