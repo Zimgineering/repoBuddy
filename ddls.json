@@ -9,10 +9,10 @@
 		"https://lisbeth.io/downloads/EN/Lisbeth.zip",
 		"Paid crafting/gathering botbase"
 	],
-	"Lisbeth - CN": [
+	"Lisbeth": [
 		"BotBases\\Lisbeth",
 		"https://lisbeth.io/downloads/CN/Lisbeth.zip",
-		"Paid crafting/gathering botbase"
+		"(CN) Paid crafting/gathering botbase"
 	],
 	"ATB": [
 		"BotBases",
