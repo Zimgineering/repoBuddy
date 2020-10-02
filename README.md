@@ -17,8 +17,8 @@ SharpSvn requires Microsoft Visual C++ 2010 SP1 Redistributable Package to funct
 
 **Botbases**:  
 [DeepDive-Combined](https://github.com/nt153133/DeepDive) - Palace of the Dead and Heaven on High botbase. Don't run HoH solo.  
-[ExFateBot](https://github.com/Fryheit/ExFateBot) - Enhanced fatebot.  
 [Kombatant](https://github.com/Fryheit/Kombatant) - Much better combat botbase, features autofollowing etc.  
+[LizExFateBot](https://github.com/jamharri/ExFateBot) - Enhanced fatebot, requires [Lisbeth](https://www.siune.io/products/lisbeth).  
 [LlamaLibrary](https://github.com/nt153133/LlamaLibrary) - Mostly for developers, Angles24 profiles require this. Includes botbases for desynth/retainers/materia/autotrade/autofollow.  
 
 **Plugins**:  
@@ -26,13 +26,15 @@ SharpSvn requires Microsoft Visual C++ 2010 SP1 Redistributable Package to funct
 [CarbuncleTech](https://github.com/Fryheit/CarbuncleTech) - Mostly for SeleCR but includes a zoom hack and titlebar changer.  
 [ExBuddy](https://github.com/Entrax643/ExBuddy) - Adds Enable Flight plugin and behaviors required for Mew and certain profiles.  
 [LeveGen](https://github.com/zzi-zzi-zzi/LeveGen) - Generates leve profiles.  
+[LisbethVentures](https://github.com/nt153133/LisbethVentures) - Reactivates retainer ventures using Lisbeth hooks.
 [RBtrust](https://github.com/athlon18/RBtrust) - Trust plugin; enable the plugin and load a profile from the RBtrust folder.  
 [repoBuddy](https://github.com/Zimgineering/repoBuddy) - Auto-updating your auto-updater!  
 
 **Profiles**:  
-[Angles24/DoH80-DoL80](https://github.com/Angles24/DoH80-DoL80) - Profiles to level your DoH/DoL, requires LlamaLibrary and [Lisbeth](https://www.siune.io/products/lisbeth).  
+[Angles24/DoH80-DoL80](https://github.com/Angles24/DoH80-DoL80) - Profiles to level your DoH/DoL, requires [LlamaLibrary](https://github.com/nt153133/LlamaLibrary) and [Lisbeth](https://www.siune.io/products/lisbeth).  
 [Sodimm](https://github.com/sodimm/RebornBuddy/tree/master/Profiles/Sodimm) - Profiles for dailies, MSQ, etc.  
 [Y2Krazy](https://github.com/y2krazy/RebornBuddy-Profiles) - Anything not in Sodimm's are likely here.  
+[ZodiacWeapons](https://github.com/domesticwarlord86/ZodiacWeapons) - Automate the zodiac weapon aquisition and upgrades.
 
 # Warnings
 * You will lose local changes to files when an update is processed, but unversioned files should not be lost.
