@@ -433,7 +433,7 @@ namespace repoBuddy
 				}
 				else
 				{
-					resolvedMask = ddlmask + @"\" + ddlname;
+					resolvedMask = ddlmask + @"\" + ddlname.Replace("-CN", "");
 				}
 
 				if(Directory.Exists(resolvedMask))

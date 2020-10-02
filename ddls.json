@@ -6,13 +6,13 @@
 	],
 	"Lisbeth": [
 		"BotBases\\Lisbeth",
-		"https://lisbeth.io/downloads/v52/Lisbeth.zip",
+		"https://lisbeth.io/downloads/EN/Lisbeth.zip",
 		"Paid crafting/gathering botbase"
 	],
-	"Arcade": [
-		"BotBases",
-		"https://cdn.discordapp.com/attachments/332630645849325568/571008115500122140/Arcade.zip",
-		"Formerly Paid MGP farmer"
+	"Lisbeth-CN": [
+		"BotBases\\Lisbeth",
+		"https://lisbeth.io/downloads/CN/Lisbeth.zip",
+		"Paid crafting/gathering botbase"
 	],
 	"ATB": [
 		"BotBases",
@@ -28,11 +28,6 @@
 		"Plugins",
 		"https://github.com/sodimm/RebornBuddy/raw/master/Downloads/Latest/Cyril/Cyril.zip",
 		"Free repairing alternative"
-	],
-	"Mew": [
-		"Plugins",
-		"https://cdn.discordapp.com/attachments/267059668008960001/681198607411576832/MewShB_2_3_1.zip",
-		"Paid gathering orderbot profile generator"
 	],
 	"DungeonMaster": [
 		"BotBases",
