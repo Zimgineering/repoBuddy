@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using ff14bot.AClasses;
 using ff14bot.Forms.ugh;
 using ff14bot.Helpers;
+using ff14bot.Managers;
 using SharpSvn;
 
 using System.IO.Compression;
@@ -34,7 +35,7 @@ namespace repoBuddy
 		public override string Name => "repoBuddy";
 		#endif		
 		public override string Author => "Zimble";
-		public override Version Version => new Version(1,0,0,9);
+		public override Version Version => new Version(1,10);
 		public override string Description => "Automatically update rb accessories from repositories";
 		public override bool WantButton => true;
 		public override string ButtonText => "Settings";
@@ -51,14 +52,17 @@ namespace repoBuddy
 		}
 		public override void OnEnabled()
 		{
-			Thread waitThread = new Thread(WaitForDone);
-            waitThread.Start();
-			Logging.Write(LogColor, $"[{Name}-{Version}] checking for updates");
+			//Thread waitThread = new Thread(WaitForDone);
+            //waitThread.Start();
+
+			Logging.Write(LogColor, $"[{Name}-v{Version}] checking for updates");
+			
+			RoutineManager.RoutineChanged += new EventHandler(WaitForLog);
 			repoStart();
+			
 		}
 		public override void OnInitialize()
 		{
-
 			GetrepoData();
 			GetddlData();
 		}
@@ -133,7 +137,50 @@ namespace repoBuddy
 			Logging.Write(LogColor, msg);
 		}
 		#region rebornbuddy init thread logic
-        public static bool IsDone()
+		public void WaitForLog(object obj, EventArgs eve)
+		{
+			RoutineManager.RoutineChanged -= WaitForLog;
+			Logging.Write(LogColor, $"[{Name}-v{Version}] waiting for Logs to end...");
+			System.Timers.Timer logwatch = new System.Timers.Timer();
+			logwatch.Interval = 3000;
+			logwatch.AutoReset = true;
+			logwatch.Enabled = true;
+			logwatch.Elapsed += new System.Timers.ElapsedEventHandler(OnTimedEvent);
+			Logging.OnLogMessage += new Logging.LogMessageDelegate(RestartTimer);
+			void RestartTimer (ReadOnlyCollection<Logging.LogMessage> message)
+			{
+				logwatch.Stop();
+				logwatch.Start();
+			}
+			void OnTimedEvent (object o, System.Timers.ElapsedEventArgs e)
+			{
+				
+				Logging.Write(LogColor, $"[{Name}-v{Version}] RB fully loaded!");
+				Logging.OnLogMessage -= RestartTimer;
+				logwatch.Elapsed -= OnTimedEvent;
+				logwatch.Stop();
+				logwatch.Dispose();
+
+				using (StreamReader file = File.OpenText(@"Plugins\repoBuddy\repoLog.json"))
+				{
+					JsonSerializer serializer = new JsonSerializer();
+					repoLog = (List<String>)serializer.Deserialize(file, typeof(List<String>));
+					
+					foreach (string change in repoLog)
+					{
+						Logging.Write(LogColor, change);
+					}
+				}
+				using (StreamWriter file = File.CreateText(@"Plugins\repoBuddy\repoLog.json"))
+				{
+					JsonSerializer serializer = new JsonSerializer();
+					repoLog.Clear();
+					serializer.Serialize(file, repoLog);
+				}					
+				
+			}
+		}
+        /*public static bool IsDone()
         {
             var asm = Assembly.GetAssembly(typeof(MainWpf));
             var type = asm.GetType("ff14bot.Forms.ugh.MainWpf");
@@ -211,7 +258,7 @@ namespace repoBuddy
             {
                 throw new TimeoutException();
             }
-        }
+        }*/
 		#endregion
 		#region repo logic
 		public void repoStart()
@@ -263,10 +310,10 @@ namespace repoBuddy
 							foreach (var logentry in logitems)
 							{
 								String logString = logentry.LogMessage.Replace(System.Environment.NewLine, " ");
-								WriteLog(repoLog, $@"[{Name}-{Version}] {repoName} r{logentry.Revision}: {logString}");
+								WriteLog(repoLog, $@"[{Name}-v{Version}] {repoName} r{logentry.Revision}: {logString}");
 							}
 
-							WriteLog(repoLog, $"[{Name}-{Version}] updated [{repoType}] {repoName} from {localRev.Revision} to {remoteRev.Revision} in {totalLap} ms.");
+							WriteLog(repoLog, $"[{Name}-v{Version}] updated [{repoType}] {repoName} from {localRev.Revision} to {remoteRev.Revision} in {totalLap} ms.");
 							if (repoType != "Profiles")
 							{
 								restartNeeded = true;
@@ -277,7 +324,7 @@ namespace repoBuddy
 					{
 						client.CheckOut(new Uri(repoUrl), repoPath);
 						totalLap = stopwatch.ElapsedMilliseconds - currentLap;
-						WriteLog(repoLog, $"[{Name}-{Version}] {repoName} checkout complete in {totalLap} ms.");
+						WriteLog(repoLog, $"[{Name}-v{Version}] {repoName} checkout complete in {totalLap} ms.");
 						if (repoType != "Profiles")
 						{
 							restartNeeded = true;
@@ -286,7 +333,7 @@ namespace repoBuddy
 				}
 			});
 			stopwatch.Stop();
-			Logging.Write(LogColor, $"[{Name}-{Version}] processes complete in {stopwatch.ElapsedMilliseconds} ms.");
+			Logging.Write(LogColor, $"[{Name}-v{Version}] processes complete in {stopwatch.ElapsedMilliseconds} ms.");
 
 			if (repoLog.Count > 0)
 			{
@@ -298,7 +345,7 @@ namespace repoBuddy
 			}
 			if (restartNeeded)
 			{
-				Logging.Write(LogColor, $"[{Name}-{Version}] Restarting to reload assemblies.");
+				Logging.Write(LogColor, $"[{Name}-v{Version}] Restarting to reload assemblies.");
 				RestartRebornBuddy();
 			}
 		}
