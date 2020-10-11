@@ -127,9 +127,9 @@ namespace repoBuddy
 			//	Process.Start("rebornbuddy", "-a"); //autologin using stored key
 			//}
 			
-			Process.Start(@"Plugins\repoBuddy\watchdog.bat");
-			Process process = Process.GetCurrentProcess();
-			process.CloseMainWindow();
+			Process RBprocess = Process.GetCurrentProcess();
+			Process.Start(@"Plugins\repoBuddy\watchdog.bat", $"{RBprocess.Id} {ff14bot.Core.Memory.Process.Id}");
+			RBprocess.CloseMainWindow();
 		}
 		public void WriteLog(List<String> array, String msg)
 		{
