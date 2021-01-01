@@ -75,4 +75,9 @@
     <Type>Profile</Type>
     <URL>https://github.com/domesticwarlord86/ZodiacWeapons.git/trunk</URL>
   </Repo>
+  <Repo>
+    <Name>Resistance-Weapons</Name>
+    <Type>Profile</Type>
+    <URL>https://github.com/domesticwarlord86/Resistance-Weapons.git/trunk</URL>
+  </Repo>
 </ReposTable>
