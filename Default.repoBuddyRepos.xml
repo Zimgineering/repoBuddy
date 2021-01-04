@@ -71,13 +71,8 @@
     <URL>https://github.com/nt153133/LisbethVentures.git/trunk</URL>
   </Repo>
   <Repo>
-    <Name>ZodiacWeapons</Name>
+    <Name>RebornProfiles</Name>
     <Type>Profile</Type>
-    <URL>https://github.com/domesticwarlord86/ZodiacWeapons.git/trunk</URL>
-  </Repo>
-  <Repo>
-    <Name>Resistance-Weapons</Name>
-    <Type>Profile</Type>
-    <URL>https://github.com/domesticwarlord86/Resistance-Weapons.git/trunk</URL>
+    <URL>https://github.com/domesticwarlord86/RebornProfiles.git/trunk</URL>
   </Repo>
 </ReposTable>
