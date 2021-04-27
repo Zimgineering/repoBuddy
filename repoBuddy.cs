@@ -35,7 +35,7 @@ namespace repoBuddy
 		public override string Name => "repoBuddy";
 		#endif		
 		public override string Author => "Zimble";
-		public override Version Version => new Version(1,10);
+		public override Version Version => new Version(1,11);
 		public override string Description => "Automatically update rb accessories from repositories";
 		public override bool WantButton => true;
 		public override string ButtonText => "Settings";
@@ -281,55 +281,66 @@ namespace repoBuddy
 				long totalLap;
 				currentLap = stopwatch.ElapsedMilliseconds;
 				
-				using (SvnClient client = new SvnClient())
-				{		
-					if (System.IO.Directory.Exists($@"{repoPath}\.svn"))
-					{
-						Collection<SvnLogEventArgs> logitems;
-
-						SvnInfoEventArgs remoteRev;
-						client.GetInfo(repoUrl, out remoteRev);
-
-						SvnInfoEventArgs localRev;
-						client.GetInfo(repoPath, out localRev);
-						
-						SvnLogArgs logArgs = new SvnLogArgs()
+				try
+				{
+					using (SvnClient client = new SvnClient())
+					{		
+						if (System.IO.Directory.Exists($@"{repoPath}\.svn"))
 						{
-							Start = localRev.Revision + 1,
-							End = remoteRev.Revision
-						};
-						
-						if (localRev.Revision < remoteRev.Revision) 
-						{
-							client.Revert(repoPath, revertArgs);
-							client.Update(repoPath);
-							totalLap = stopwatch.ElapsedMilliseconds - currentLap;
+							Collection<SvnLogEventArgs> logitems;
 
-							client.GetLog(repoPath, logArgs, out logitems);
+							SvnInfoEventArgs remoteRev;
+							client.GetInfo(repoUrl, out remoteRev);
 
-							foreach (var logentry in logitems)
+							SvnInfoEventArgs localRev;
+							client.GetInfo(repoPath, out localRev);
+							
+							SvnLogArgs logArgs = new SvnLogArgs()
 							{
-								String logString = logentry.LogMessage.Replace(System.Environment.NewLine, " ");
-								WriteLog(repoLog, $@"[{Name}-v{Version}] {repoName} r{logentry.Revision}: {logString}");
-							}
+								Start = localRev.Revision + 1,
+								End = remoteRev.Revision
+							};
+							
+							if (localRev.Revision < remoteRev.Revision) 
+							{
+								client.Revert(repoPath, revertArgs);
+								client.Update(repoPath);
+								totalLap = stopwatch.ElapsedMilliseconds - currentLap;
 
-							WriteLog(repoLog, $"[{Name}-v{Version}] updated [{repoType}] {repoName} from {localRev.Revision} to {remoteRev.Revision} in {totalLap} ms.");
+								client.GetLog(repoPath, logArgs, out logitems);
+
+								foreach (var logentry in logitems)
+								{
+									String logString = logentry.LogMessage.Replace(System.Environment.NewLine, " ");
+									WriteLog(repoLog, $@"[{Name}-v{Version}] {repoName} r{logentry.Revision}: {logString}");
+								}
+
+								WriteLog(repoLog, $"[{Name}-v{Version}] updated [{repoType}] {repoName} from {localRev.Revision} to {remoteRev.Revision} in {totalLap} ms.");
+								if (repoType != "Profiles")
+								{
+									restartNeeded = true;
+								}
+							}
+						}
+						else
+						{
+							client.CheckOut(new Uri(repoUrl), repoPath);
+							totalLap = stopwatch.ElapsedMilliseconds - currentLap;
+							WriteLog(repoLog, $"[{Name}-v{Version}] {repoName} checkout complete in {totalLap} ms.");
 							if (repoType != "Profiles")
 							{
 								restartNeeded = true;
 							}
 						}
 					}
-					else
-					{
-						client.CheckOut(new Uri(repoUrl), repoPath);
-						totalLap = stopwatch.ElapsedMilliseconds - currentLap;
-						WriteLog(repoLog, $"[{Name}-v{Version}] {repoName} checkout complete in {totalLap} ms.");
-						if (repoType != "Profiles")
-						{
-							restartNeeded = true;
-						}
-					}
+				}
+				catch (SharpSvn.SvnAuthenticationException e)
+				{
+					WriteLog(repoLog, $"[{Name}-v{Version}] {repoName} No more credentials or we tried too many times. {e}");
+				}
+				catch (System.AccessViolationException e)
+				{
+					WriteLog(repoLog, $"[{Name}-v{Version}] {repoName} Access Violation, something is locking the folder. {e}");
 				}
 			});
 			stopwatch.Stop();

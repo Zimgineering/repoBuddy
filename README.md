@@ -18,7 +18,6 @@ SharpSvn requires Microsoft Visual C++ 2010 SP1 Redistributable Package to funct
 **Botbases**:  
 [DeepDive-Combined](https://github.com/nt153133/DeepDive) - Palace of the Dead and Heaven on High botbase. Don't run HoH solo.  
 [Kombatant](https://github.com/Fryheit/Kombatant) - Much better combat botbase, features autofollowing etc.  
-[LizExFateBot](https://github.com/jamharri/ExFateBot) - Enhanced fatebot, requires [Lisbeth](https://www.siune.io/products/lisbeth).  
 [LlamaLibrary](https://github.com/nt153133/LlamaLibrary) - Mostly for developers, Angles24 profiles require this. Includes botbases for desynth/retainers/materia/autotrade/autofollow.  
 
 **Plugins**:  
