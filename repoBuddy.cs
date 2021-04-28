@@ -342,6 +342,10 @@ namespace repoBuddy
 				{
 					WriteLog(repoLog, $"[{Name}-v{Version}] {repoName} Access Violation, something is locking the folder. {e}");
 				}
+				catch (SharpSvn.SvnException e)
+				{
+					WriteLog(repoLog, $"[{Name}-v{Version}] {repoName} Generic SvnException, do you have tortoiseSVN monitoring this folder?");
+				}
 			});
 			stopwatch.Stop();
 			Logging.Write(LogColor, $"[{Name}-v{Version}] processes complete in {stopwatch.ElapsedMilliseconds} ms.");
