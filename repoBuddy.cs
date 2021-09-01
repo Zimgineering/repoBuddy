@@ -344,7 +344,7 @@ namespace repoBuddy
 				}
 				catch (SharpSvn.SvnException e)
 				{
-					WriteLog(repoLog, $"[{Name}-v{Version}] {repoName} Generic SvnException, do you have tortoiseSVN monitoring this folder?");
+					WriteLog(repoLog, $"[{Name}-v{Version}] {repoName} Generic SvnException, do you have tortoiseSVN monitoring this folder? CN users may need a VPN to access GitHub");
 				}
 			});
 			stopwatch.Stop();
