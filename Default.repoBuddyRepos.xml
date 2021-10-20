@@ -70,4 +70,9 @@
     <Type>Profile</Type>
     <URL>https://github.com/domesticwarlord86/RebornProfiles.git/trunk</URL>
   </Repo>
+  <Repo>
+    <Name>DungeonAssist</Name>
+    <Type>Plugin</Type>
+    <URL>https://github.com/BurnUnit83/DungeonAssist.git/trunk</URL>
+  </Repo>
 </ReposTable>
