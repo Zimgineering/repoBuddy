@@ -75,4 +75,9 @@
     <Type>Plugin</Type>
     <URL>https://github.com/BurnUnit83/DungeonAssist.git/trunk</URL>
   </Repo>
+  <Repo>
+    <Name>ResistAssist</Name>
+    <Type>Plugin</Type>
+    <URL>https://github.com/BurnUnit83/ResistAssist.git/trunk</URL>
+  </Repo>
 </ReposTable>
