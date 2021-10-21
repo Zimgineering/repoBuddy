@@ -24,12 +24,12 @@ SharpSvn requires Microsoft Visual C++ 2010 SP1 Redistributable Package to funct
 **Plugins**:  
 [AlertMe](https://github.com/parrot-dev/AlertMe) - Chat/emote monitoring.  
 [CarbuncleTech](https://github.com/Fryheit/CarbuncleTech) - Mostly for SeleCR but includes a zoom hack and titlebar changer.  
-[DungeonAssist](https://github.com/BurnUnit83/DungeonAssist) - Mostly used with DomesticWarlord86's Resistance Weapons profiles.
+[DungeonAssist](https://github.com/BurnUnit83/DungeonAssist) - Mostly used with DomesticWarlord86's Resistance Weapons profiles.  
 [ExBuddy](https://github.com/Entrax643/ExBuddy) - Adds Enable Flight plugin and behaviors required for Mew and certain profiles.  
 [LeveGen](https://github.com/zzi-zzi-zzi/LeveGen) - Generates leve profiles.  
-[LisbethVentures](https://github.com/nt153133/LisbethVentures) - Reactivates retainer ventures using Lisbeth hooks.
+[LisbethVentures](https://github.com/nt153133/LisbethVentures) - Reactivates retainer ventures using Lisbeth hooks.  
 [RBtrust](https://github.com/athlon18/RBtrust) - Trust plugin; enable the plugin and load a profile from the RBtrust folder.  
-[ResistAssist](https://github.com/BurnUnit83/ResistAssist) - For use with DomesticWarlord86's profiles in Bozja and Eureka.
+[ResistAssist](https://github.com/BurnUnit83/ResistAssist) - For use with DomesticWarlord86's profiles in Bozja and Eureka.  
 [repoBuddy](https://github.com/Zimgineering/repoBuddy) - Auto-updating your auto-updater!  
 
 **Profiles**:  
