@@ -46,11 +46,6 @@
     <URL>https://github.com/nt153133/DeepDive.git/trunk</URL>
   </Repo>
   <Repo>
-    <Name>LlamaLibrary</Name>
-    <Type>BotBase</Type>
-    <URL>https://github.com/nt153133/LlamaLibrary.git/trunk</URL>
-  </Repo>
-  <Repo>
     <Name>Angles24/DoH80-DoL80</Name>
     <Type>Profile</Type>
     <URL>https://github.com/Angles24/DoH80-DoL80.git/trunk</URL>
@@ -79,5 +74,30 @@
     <Name>ResistAssist</Name>
     <Type>Plugin</Type>
     <URL>https://github.com/BurnUnit83/ResistAssist.git/trunk</URL>
+  </Repo>
+  <Repo>
+    <Name>__LlamaLibrary</Name>
+    <Type>Quest Behavior</Type>
+    <URL>https://github.com/nt153133/__LlamaLibrary.git/trunk</URL>
+  </Repo>
+  <Repo>
+    <Name>LlamaUtilities</Name>
+    <Type>Botbase</Type>
+    <URL>https://github.com/nt153133/LlamaUtilities.git/trunk</URL>
+  </Repo>
+  <Repo>
+    <Name>ExtraBotbases</Name>
+    <Type>Botbase</Type>
+    <URL>https://github.com/nt153133/ExtraBotbases.git/trunk</URL>
+  </Repo>
+  <Repo>
+    <Name>LlamaPlugins</Name>
+    <Type>Plugin</Type>
+    <URL>https://github.com/nt153133/LlamaPlugins.git/trunk</URL>
+  </Repo>
+  <Repo>
+    <Name>ResplendentTools</Name>
+    <Type>Botbase</Type>
+    <URL>https://github.com/Sykel/ResplendentTools.git/trunk</URL>
   </Repo>
 </ReposTable>

@@ -53,18 +53,46 @@ namespace repoBuddy
 		public override void OnEnabled()
 		{
 			//Thread waitThread = new Thread(WaitForDone);
-            //waitThread.Start();
+			//waitThread.Start();
 
 			Logging.Write(LogColor, $"[{Name}-v{Version}] checking for updates");
 			
 			RoutineManager.RoutineChanged += new EventHandler(WaitForLog);
 			repoStart();
-			
 		}
 		public override void OnInitialize()
 		{
+
 			GetrepoData();
 			GetddlData();
+		}
+		public void MigrateLlamaLibrary()
+		{
+			
+			try
+			{
+				if (System.IO.Directory.Exists($@"BotBases\LlamaLibrary"))
+				{
+					for (int i = 0; i < repoDataSet.Tables["Repo"].Rows.Count; i++)
+					{
+						if (repoDataSet.Tables["Repo"].Rows[i]["Name"].ToString()=="LlamaLibrary")
+						{
+							repoDataSet.Tables["Repo"].Rows.RemoveAt(i);
+							repoDataSet.Tables["Repo"].Rows.Add("LlamaUtilities", "Botbase", "https://github.com/nt153133/LlamaUtilities.git/trunk");
+							repoDataSet.Tables["Repo"].Rows.Add("ExtraBotbases", "Botbase", "https://github.com/nt153133/ExtraBotbases.git/trunk");
+							repoDataSet.Tables["Repo"].Rows.Add("ResplendentTools", "Botbase", "https://github.com/Sykel/ResplendentTools.git/trunk");
+							repoDataSet.Tables["Repo"].Rows.Add("LlamaPlugins", "Plugin", "https://github.com/nt153133/LlamaPlugins.git/trunk");
+						}
+					}
+					repoDataSet.WriteXml(repoXML);
+					ZipFile.CreateFromDirectory($@"BotBases\LlamaLibrary", $@"BotBases\LlamaLibrary_{DateTime.Now.Ticks}.zip");
+					Directory.Delete($@"BotBases\LlamaLibrary", true);
+				}
+			}
+			catch (Exception e)
+			{
+				Logging.Write(LogColor, $"[{Name}-v{Version}] Archiving Llamalibrary failed, please backup and delete manually. {e}");
+			}
 		}
 		public void CreateSettingsForm()
 		{
@@ -176,89 +204,11 @@ namespace repoBuddy
 					JsonSerializer serializer = new JsonSerializer();
 					repoLog.Clear();
 					serializer.Serialize(file, repoLog);
-				}					
+				}						
 				
 			}
 		}
-        /*public static bool IsDone()
-        {
-            var asm = Assembly.GetAssembly(typeof(MainWpf));
-            var type = asm.GetType("ff14bot.Forms.ugh.MainWpf");
-            var props = type.GetField("btnStart", BindingFlags.NonPublic | BindingFlags.Instance);
-            System.Windows.Controls.Button btnStart = (System.Windows.Controls.Button) props.GetValue(MainWpf.current);
-            bool result = false;
-            btnStart.Dispatcher.Invoke(() => { result = btnStart.IsEnabled; });
 
-            return result;
-        }
-		public static async void WaitForDone()
-        {
-			#if RB_CN
-			int timeoutVar = 300000; // 5 minutes
-			#else
-			int timeoutVar = 60000;
-			#endif
-
-            await WaitUntil(IsDone, 100, timeoutVar);
-
-            if (IsDone())
-            {
-                System.Timers.Timer logwatch = new System.Timers.Timer();
-                logwatch.Interval = 3000;
-                logwatch.AutoReset = true;
-                logwatch.Enabled = true;
-                logwatch.Elapsed += new System.Timers.ElapsedEventHandler(OnTimedEvent);
-                Logging.OnLogMessage += new Logging.LogMessageDelegate(RestartTimer);
-                void RestartTimer (ReadOnlyCollection<Logging.LogMessage> message)
-                {
-					logwatch.Stop();
-					logwatch.Start();
-                }
-                void OnTimedEvent (object o, System.Timers.ElapsedEventArgs e)
-                {
-					Logging.OnLogMessage -= RestartTimer;
-					logwatch.Elapsed -= OnTimedEvent;
-					logwatch.Stop();
-					logwatch.Dispose();
-
-					using (StreamReader file = File.OpenText(@"Plugins\repoBuddy\repoLog.json"))
-					{
-						JsonSerializer serializer = new JsonSerializer();
-						repoLog = (List<String>)serializer.Deserialize(file, typeof(List<String>));
-						
-						foreach (string change in repoLog)
-						{
-							Logging.Write(LogColor, change);
-						}
-					}
-					using (StreamWriter file = File.CreateText(@"Plugins\repoBuddy\repoLog.json"))
-					{
-						JsonSerializer serializer = new JsonSerializer();
-						repoLog.Clear();
-						serializer.Serialize(file, repoLog);
-					}					
-                }
-            }
-            else
-            {
-                Logging.Write(LogColor, $"Timed out");
-            }
-        }
-        public static async Task WaitUntil(Func<bool> condition, int frequency = 25, int timeout = -1)
-        {
-            var waitTask = Task.Run(async () =>
-            {
-                while (!condition())
-                {
-                    await Task.Delay(frequency);
-                }
-            });
-
-            if (waitTask != await Task.WhenAny(waitTask, Task.Delay(timeout)))
-            {
-                throw new TimeoutException();
-            }
-        }*/
 		#endregion
 		#region repo logic
 		public void repoStart()
@@ -349,6 +299,8 @@ namespace repoBuddy
 			});
 			stopwatch.Stop();
 			Logging.Write(LogColor, $"[{Name}-v{Version}] processes complete in {stopwatch.ElapsedMilliseconds} ms.");
+			
+			MigrateLlamaLibrary();
 
 			if (repoLog.Count > 0)
 			{
@@ -450,7 +402,7 @@ namespace repoBuddy
 			nameBox.GotFocus += new EventHandler(NameBox_GotFocus);
 			nameBox.LostFocus += new EventHandler(NameBox_LostFocus);
 
-			typeBox.Items.AddRange(new string[] { "BotBase", "Plugin", "Profile", "Routine" });
+			typeBox.Items.AddRange(new string[] { "BotBase", "Plugin", "Profile", "Routine", "Quest Behavior" });
 			typeBox.DropDownStyle = ComboBoxStyle.DropDownList;
 			typeBox.SelectedIndex = 0;
 
