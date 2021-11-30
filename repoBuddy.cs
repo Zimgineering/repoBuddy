@@ -91,7 +91,8 @@ namespace repoBuddy
 					ZipFile.CreateFromDirectory($@"Plugins\LisbethVentures", $@"Plugins\LisbethVentures_{DateTime.Now.Ticks}.zip");
 					Directory.Delete($@"Plugins\LisbethVentures", true);
 				}
-				repoDataSet.WriteXml(repoXML);
+				repoDataSet.WriteXml(repoXML);		
+				restartNeeded = true;
 			}
 			catch (Exception e)
 			{
@@ -113,16 +114,17 @@ namespace repoBuddy
 							repoDataSet.Tables["Repo"].Rows.Add("LlamaPlugins", "Plugin", "https://github.com/nt153133/LlamaPlugins.git/trunk");
 						}
 					}
-					repoDataSet.WriteXml(repoXML);
+					repoDataSet.WriteXml(repoXML);		
+					restartNeeded = true;
 					ZipFile.CreateFromDirectory($@"BotBases\LlamaLibrary", $@"BotBases\LlamaLibrary_{DateTime.Now.Ticks}.zip");
 					Directory.Delete($@"BotBases\LlamaLibrary", true);
 				}
+				
 			}
 			catch (Exception e)
 			{
 				Logging.Write(LogColor, $"[{Name}-v{Version}] Archiving Llamalibrary failed, please backup and delete manually. {e}");
 			}
-			restartNeeded = true;
 		}
 		public void CreateSettingsForm()
 		{
