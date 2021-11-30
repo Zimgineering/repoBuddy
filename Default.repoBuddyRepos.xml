@@ -95,4 +95,14 @@
     <Type>Botbase</Type>
     <URL>https://github.com/Sykel/ResplendentTools.git/trunk</URL>
   </Repo>
+  <Repo>
+    <Name>Osiris</Name>
+    <Type>Plugin</Type>
+    <URL>https://github.com/domesticwarlord86/Osiris.git/trunk</URL>
+  </Repo>
+  <Repo>
+    <Name>Gluttony</Name>
+    <Type>Plugin</Type>
+    <URL>https://github.com/domesticwarlord86/Gluttony.git/trunk</URL>
+  </Repo>
 </ReposTable>
