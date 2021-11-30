@@ -68,7 +68,35 @@ namespace repoBuddy
 		}
 		public void MigrateLlamaLibrary()
 		{
-			
+			try
+			{
+				for (int i = 0; i < repoDataSet.Tables["Repo"].Rows.Count; i++)
+				{
+					if (repoDataSet.Tables["Repo"].Rows[i]["Name"].ToString()=="FCBuffPlugin")
+					{
+						repoDataSet.Tables["Repo"].Rows.RemoveAt(i);
+					}
+					if (repoDataSet.Tables["Repo"].Rows[i]["Name"].ToString()=="LisbethVentures")
+					{
+						repoDataSet.Tables["Repo"].Rows.RemoveAt(i);
+					}
+				}
+				if (System.IO.Directory.Exists($@"Plugins\FCBuffPlugin"))
+				{					
+					ZipFile.CreateFromDirectory($@"Plugins\FCBuffPlugin", $@"Plugins\FCBuffPlugin_{DateTime.Now.Ticks}.zip");
+					Directory.Delete($@"Plugins\FCBuffPlugin", true);
+				}
+				if (System.IO.Directory.Exists($@"Plugins\LisbethVentures"))
+				{					
+					ZipFile.CreateFromDirectory($@"Plugins\LisbethVentures", $@"Plugins\LisbethVentures_{DateTime.Now.Ticks}.zip");
+					Directory.Delete($@"Plugins\LisbethVentures", true);
+				}
+				repoDataSet.WriteXml(repoXML);
+			}
+			catch (Exception e)
+			{
+				Logging.Write(LogColor, $"[{Name}-v{Version}] Cleaning up migrated Llamalibrary misc. failed, delete LisbethVentures and FCBuffPlugin manually. {e}");
+			}
 			try
 			{
 				if (System.IO.Directory.Exists($@"BotBases\LlamaLibrary"))
@@ -78,6 +106,7 @@ namespace repoBuddy
 						if (repoDataSet.Tables["Repo"].Rows[i]["Name"].ToString()=="LlamaLibrary")
 						{
 							repoDataSet.Tables["Repo"].Rows.RemoveAt(i);
+							repoDataSet.Tables["Repo"].Rows.Add("__LlamaLibrary", "Quest Behavior", "https://github.com/nt153133/__LlamaLibrary.git/trunk");
 							repoDataSet.Tables["Repo"].Rows.Add("LlamaUtilities", "Botbase", "https://github.com/nt153133/LlamaUtilities.git/trunk");
 							repoDataSet.Tables["Repo"].Rows.Add("ExtraBotbases", "Botbase", "https://github.com/nt153133/ExtraBotbases.git/trunk");
 							repoDataSet.Tables["Repo"].Rows.Add("ResplendentTools", "Botbase", "https://github.com/Sykel/ResplendentTools.git/trunk");
@@ -93,6 +122,7 @@ namespace repoBuddy
 			{
 				Logging.Write(LogColor, $"[{Name}-v{Version}] Archiving Llamalibrary failed, please backup and delete manually. {e}");
 			}
+			restartNeeded = true;
 		}
 		public void CreateSettingsForm()
 		{
@@ -292,9 +322,18 @@ namespace repoBuddy
 				{
 					WriteLog(repoLog, $"[{Name}-v{Version}] {repoName} Access Violation, something is locking the folder. {e}");
 				}
+				catch (SharpSvn.SvnFileSystemException e)
+				{
+					WriteLog(repoLog, $"[{Name}-v{Version}] {repoName} FileSystemException, repo has probably been moved/deleted. {e}");
+				}
 				catch (SharpSvn.SvnException e)
 				{
 					WriteLog(repoLog, $"[{Name}-v{Version}] {repoName} Generic SvnException, do you have tortoiseSVN monitoring this folder? CN users may need a VPN to access GitHub");
+					
+					WriteLog(repoLog, $"[{Name}-v{Version}] **************************");					
+					WriteLog(repoLog, $"[{Name}-v{Version}] This will prevent further updates, delete the {repoName} .svn folder and make sure tortoiseSVN doesn't manage anything repoBuddy does.");
+					WriteLog(repoLog, $"[{Name}-v{Version}] **************************");
+					restartNeeded = false;
 				}
 			});
 			stopwatch.Stop();
