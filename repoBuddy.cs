@@ -259,6 +259,10 @@ namespace repoBuddy
 				string repoType = row[1].ToString() + "s";
 				string repoUrl = row[2].ToString();
 				string repoPath = $@"{repoType}\{repoName}";
+		
+				#if RB_CN
+				repoUrl = repoUrl.Replace("github.com", "github.com.cnpmjs.org"); //may cause uri conflicts
+				#endif	
 
 				long currentLap;
 				long totalLap;
