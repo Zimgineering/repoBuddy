@@ -28,10 +28,5 @@
 		"Plugins",
 		"https://github.com/sodimm/RebornBuddy/raw/master/Downloads/Latest/Cyril/Cyril.zip",
 		"Free repairing alternative"
-	],
-	"DungeonMaster": [
-		"BotBases",
-		"https://auth.titanbots.gg/download/UqejmX9EylR58JiHuPCjAw/latest.zip",
-		"Formerly Paid dungeon running botbase"
 	]
 }
