@@ -85,13 +85,13 @@ namespace repoBuddy
 				{					
 					ZipFile.CreateFromDirectory($@"Plugins\FCBuffPlugin", $@"Plugins\FCBuffPlugin_{DateTime.Now.Ticks}.zip");
 					Directory.Delete($@"Plugins\FCBuffPlugin", true);
-					restartNeeded = true;
+					//restartNeeded = true;
 				}
 				if (System.IO.Directory.Exists($@"Plugins\LisbethVentures"))
 				{					
 					ZipFile.CreateFromDirectory($@"Plugins\LisbethVentures", $@"Plugins\LisbethVentures_{DateTime.Now.Ticks}.zip");
 					Directory.Delete($@"Plugins\LisbethVentures", true);
-					restartNeeded = true;
+					//restartNeeded = true;
 				}
 				repoDataSet.WriteXml(repoXML);		
 			}
@@ -116,7 +116,7 @@ namespace repoBuddy
 						}
 					}
 					repoDataSet.WriteXml(repoXML);		
-					restartNeeded = true;
+					//restartNeeded = true;
 					ZipFile.CreateFromDirectory($@"BotBases\LlamaLibrary", $@"BotBases\LlamaLibrary_{DateTime.Now.Ticks}.zip");
 					Directory.Delete($@"BotBases\LlamaLibrary", true);
 				}
