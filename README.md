@@ -5,7 +5,7 @@ A plugin for the RebornBuddy FFXIV MMO bot to automatically update accessories f
 [Included in repoBuddyRepos.xml](#included-repos) are a number of commonly used repos, if you do not want any of those then remove the relevant data in the xml (using a text editor) or using the settings button before enabling.
 >Any updates to Default.repoBuddyRepos.xml will require you to delete repoBuddyRepos.xml in order to recieve added/removed repos automatically.
 # Installation
-SharpSvn requires Microsoft Visual C++ 2010 SP1 Redistributable Package to function, download [HERE (64-bit)](https://www.microsoft.com/en-us/download/details.aspx?id=13523)
+SharpSvn requires Microsoft Visual C++ 2010 SP1 Redistributable Package to function, click download [HERE](https://www.microsoft.com/en-us/download/details.aspx?id=26999) and you'll get a prompt to select the version (choose x64)
 1. Download using your preferred method or [HERE](https://github.com/Zimgineering/repoBuddy/archive/master.zip)
     >make sure to unblock the file (properties->unblock checkbox)
 2. Extract the archive into your plugins directory (remove -master from the folder name if necessary)
