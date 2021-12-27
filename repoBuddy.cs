@@ -335,7 +335,7 @@ namespace repoBuddy
 				}
 				catch (SharpSvn.SvnException e)
 				{
-					WriteLog(repoLog, $"[{Name}-v{Version}] {repoName} Generic SvnException, do you have tortoiseSVN monitoring this folder? CN users may need a VPN to access GitHub");
+					WriteLog(repoLog, $"[{Name}-v{Version}] {repoName} Generic SvnException, do you have tortoiseSVN monitoring this folder? CN users may need a VPN to access GitHub. {e}");
 					
 					WriteLog(repoLog, $"[{Name}-v{Version}] **************************");					
 					WriteLog(repoLog, $"[{Name}-v{Version}] This will prevent further updates, delete the {repoName} .svn folder and make sure tortoiseSVN doesn't manage anything repoBuddy does.");
