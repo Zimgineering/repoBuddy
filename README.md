@@ -18,7 +18,7 @@ SharpSvn requires Microsoft Visual C++ 2010 SP1 Redistributable Package to funct
 
 Win + R -> %APPDATA% -> \\AppData\Roaming\Subversion\servers -> edit
 
-
+Example:
 ```
 [global]
 http-proxy-host = 127.0.0.1
