@@ -14,6 +14,19 @@ SharpSvn requires Microsoft Visual C++ 2010 SP1 Redistributable Package to funct
 4. Enable repoBuddy in your plugins section ~~and restart rebornbuddy when the process is complete for changes to take effect~~ v0.0.0.2+ forces a restart after a botbase/plugin/routine gets updated.
 5. Click any of the direct download buttons on the One-Time downloads tab, and once finished click Restart RebornBuddy.
 
+# Proxy/VPN settings
+
+Win + R -> %APPDATA% -> \\AppData\Roaming\Subversion\servers -> edit
+
+
+```
+[global]
+http-proxy-host = 127.0.0.1
+http-proxy-port = 4200
+```
+
+[Thanks to Lazy-Pupu!](https://github.com/Zimgineering/repoBuddy/issues/10#issuecomment-1100777062)
+
 # Included Repos
 
 **Botbases**:  
