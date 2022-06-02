@@ -23,12 +23,7 @@
   <Repo>
     <Name>CarbuncleTech</Name>
     <Type>Plugin</Type>
-    <URL>https://github.com/Fryheit/CarbuncleTech.git/trunk</URL>
-  </Repo>
-  <Repo>
-    <Name>Levegen</Name>
-    <Type>Plugin</Type>
-    <URL>https://github.com/zzi-zzi-zzi/LeveGen.git/trunk</URL>
+    <URL>https://github.com/nt153133/CarbuncleTech.git/trunk</URL>
   </Repo>
   <Repo>
     <Name>RBtrust</Name>
@@ -81,11 +76,6 @@
     <URL>https://github.com/nt153133/LlamaUtilities.git/trunk</URL>
   </Repo>
   <Repo>
-    <Name>ExtraBotbases</Name>
-    <Type>Botbase</Type>
-    <URL>https://github.com/nt153133/ExtraBotbases.git/trunk</URL>
-  </Repo>
-  <Repo>
     <Name>LlamaPlugins</Name>
     <Type>Plugin</Type>
     <URL>https://github.com/nt153133/LlamaPlugins.git/trunk</URL>
@@ -104,5 +94,10 @@
     <Name>Gluttony</Name>
     <Type>Plugin</Type>
     <URL>https://github.com/domesticwarlord86/Gluttony.git/trunk</URL>
+  </Repo>
+  <Repo>
+    <Name>LogJanitor</Name>
+    <Type>Plugin</Type>
+    <URL>https://github.com/bismuth-dev/LogJanitor.git/trunk</URL>
   </Repo>
 </ReposTable>
