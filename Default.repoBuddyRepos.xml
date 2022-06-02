@@ -105,4 +105,9 @@
     <Type>Plugin</Type>
     <URL>https://github.com/domesticwarlord86/Gluttony.git/trunk</URL>
   </Repo>
+  <Repo>
+    <Name>LogJanitor</Name>
+    <Type>Plugin</Type>
+    <URL>https://github.com/bismuth-dev/LogJanitor.git/trunk</URL>
+  </Repo>
 </ReposTable>
