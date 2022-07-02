@@ -61,11 +61,6 @@
     <URL>https://github.com/BurnUnit83/DungeonAssist.git/trunk</URL>
   </Repo>
   <Repo>
-    <Name>ResistAssist</Name>
-    <Type>Plugin</Type>
-    <URL>https://github.com/BurnUnit83/ResistAssist.git/trunk</URL>
-  </Repo>
-  <Repo>
     <Name>__LlamaLibrary</Name>
     <Type>Quest Behavior</Type>
     <URL>https://github.com/nt153133/__LlamaLibrary.git/trunk</URL>
