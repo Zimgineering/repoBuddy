@@ -61,6 +61,7 @@
         <Compile Include="repoBuddy.cs" />
     </ItemGroup>
     <ItemGroup>
+      <Content Include="ddls.json" />
       <Content Include="Default.repoBuddyRepos.xml" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
