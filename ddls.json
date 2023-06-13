@@ -1,7 +1,7 @@
 {
 	"Magitek": [
 		"Routines\\Magitek",
-		"https://cdn.discordapp.com/attachments/332630645849325568/989323185654743060/Magitek.zip",
+		"https://ddjx48xxp2d6i.cloudfront.net/Magitek.zip",
 		"Formerly Paid combat routine"
 	],
 	"Lisbeth": [
@@ -24,9 +24,44 @@
 		"https://cdn.discordapp.com/attachments/280934636836618240/716017721698943056/Crawler.zip",
 		"Formerly Paid combat botbase, very fast"
 	],
-	"Cyril": [
-		"Plugins",
-		"https://github.com/sodimm/RebornBuddy/raw/master/Downloads/Latest/Cyril/Cyril.zip",
-		"Free repairing alternative"
+	"IslandGatherer": [
+		"BotBases\\IslandGatherer",
+		"https://islandgatherer.llamaserver.com/IslandGatherer.zip",
+		"Paid botbase to gather items in Island Sancturary."
+	],
+	"LlamaMarket": [
+		"BotBases\\LlamaMarket",
+		"https://llamamarket.llamaserver.com/LlamaMarket.zip",
+		"Paid botbase to to list items and update prices on the MB."
+	],
+	"Platypus": [
+		"BotBases\\Platypus",
+		"https://rbplatypus.com/downloads/latest",
+		"Free+ botbase with multiple inventory and currency functions."
+	],
+	"Minionway": [
+		"Plugins\\Minionway",
+		"https://cdn.minionway.com/downloads/latest",
+		"Free+ Plugin to monitor character and interact with players and track stats."
+	],
+	"BeastTribes": [
+		"Plugins\\BeastTribes",
+		"https://sts.llamamagic.net/BeastTribes/BeastTribes.zip",
+		"Paid plugin that will do daily beast tribe quests for you."
+	],
+	"AnimaWeapons": [
+		"Plugins\\AnimeWeapons",
+		"https://sts.llamamagic.net/AnimaWeapons/AnimaWeapons.zip",
+		"Paid plugin that will obtain the level 60 DoW relic weapons."
+	],
+	"MandervilleWeapons": [
+		"Plugins\\MandervilleWeapons",
+		"https://sts.llamamagic.net/MandervilleWeapons/MandervilleWeapons.zip",
+		"Paid plugin that will obtain the level 90 DoW relic weapons."
+	],
+	"SplendorousTools": [
+		"Plugins\\SplendorousTools",
+		"https://sts.llamamagic.net/SplendorousTools/SplendorousTools.zip",
+		"Paid plugin that will obtain the level 90 DoH/DoL relic weapons."
 	]
 }
