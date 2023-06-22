@@ -63,5 +63,10 @@
 		"Plugins\\SplendorousTools",
 		"https://sts.llamamagic.net/SplendorousTools/SplendorousTools.zip",
 		"Paid plugin that will obtain the level 90 DoH/DoL relic weapons."
-	]
+	],
+	"ZodiacWeapons": [
+		"Plugins\\ZodiacWeapons",
+		"https://sts.llamamagic.net/ZodiacWeapons/ZodiacWeapons.zip",
+		"Paid plugin that will obtain the level 50 DoW relic weapons."
+	]	
 }
