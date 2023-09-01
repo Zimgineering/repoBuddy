@@ -136,9 +136,10 @@ public class repoBuddy : BotPlugin
 
     public void GetRepoData()
     {
-        if (!File.Exists(Constants.ReposXmlPath))
+        var settingsFileInfo = new FileInfo(Constants.ReposXmlPath);
+        if (!settingsFileInfo.Exists || settingsFileInfo.Length == 0)
         {
-            File.Copy(Constants.DefaultReposXmlPath, Constants.ReposXmlPath);
+            File.Copy(Constants.DefaultReposXmlPath, Constants.ReposXmlPath, overwrite: true);
         }
 
         repoDataSet.Clear();
