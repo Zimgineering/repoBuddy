@@ -5,24 +5,20 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
-using System.Linq;
 using System.IO;
+using System.Linq;
+using System.Net.Http;
 using System.Reflection;
-using System.Threading;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Timers;
 using System.Windows.Forms;
 using System.Windows.Media;
-using Newtonsoft.Json;
 using ff14bot.AClasses;
-using ff14bot.Forms.ugh;
 using ff14bot.Helpers;
 using ff14bot.Managers;
-using SharpSvn;
-using System.IO.Compression;
-using System.Net.Http;
-using System.Runtime.CompilerServices;
 using ICSharpCode.SharpZipLib.Zip;
+using Newtonsoft.Json;
+using SharpSvn;
 
 
 namespace repoBuddy;
@@ -30,21 +26,21 @@ namespace repoBuddy;
 public class repoBuddy : BotPlugin
 {
 #if RB_CN
-		public override string Name => "RB 资源更新器";
+        public override string Name => "RB 资源更新器";
 #else
     public override string Name => "repoBuddy";
 #endif
     public override string Author => "Zimble";
     public override Version Version => new Version(1, 11);
-    public override string Description => "Automatically update rb accessories from repositories";
+    public override string Description => "Automatically update RB accessories from repositories";
     public override bool WantButton => true;
     public override string ButtonText => "Settings";
     public static DataSet repoDataSet = new DataSet();
     public static string repoXML => Path.Combine(SourceDirectory().FullName, "repoBuddyRepos.xml");
     private static Color LogColor = Colors.Wheat;
     public bool restartNeeded = false;
-    public static List<String> repoLog = new List<String>();
-    public static Dictionary<String, List<String>> ddlDict = new Dictionary<String, List<String>>();
+    public static List<string> repoLog = new List<string>();
+    public static Dictionary<string, List<string>> ddlDict = new Dictionary<string, List<string>>();
 
     public override void OnButtonPress()
     {
@@ -63,11 +59,11 @@ public class repoBuddy : BotPlugin
 
     public override void OnInitialize()
     {
-        GetrepoData();
-        GetddlData();
+        GetRepoData();
+        GetDdlData();
     }
-    
-    [System.Runtime.CompilerServices.MethodImpl(MethodImplOptions.NoInlining)]
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
     public static DirectoryInfo SourceDirectory()
     {
         var frame = new StackFrame(0, true);
@@ -98,14 +94,14 @@ public class repoBuddy : BotPlugin
                 }
             }
 
-            if (System.IO.Directory.Exists($@"Plugins\FCBuffPlugin"))
+            if (Directory.Exists($@"Plugins\FCBuffPlugin"))
             {
                 ZipFolder($@"Plugins\FCBuffPlugin", $@"Plugins\FCBuffPlugin_{DateTime.Now.Ticks}.zip");
                 Directory.Delete($@"Plugins\FCBuffPlugin", true);
                 //restartNeeded = true;
             }
 
-            if (System.IO.Directory.Exists($@"Plugins\LisbethVentures"))
+            if (Directory.Exists($@"Plugins\LisbethVentures"))
             {
                 ZipFolder($@"Plugins\LisbethVentures", $@"Plugins\LisbethVentures_{DateTime.Now.Ticks}.zip");
                 Directory.Delete($@"Plugins\LisbethVentures", true);
@@ -116,12 +112,12 @@ public class repoBuddy : BotPlugin
         }
         catch (Exception e)
         {
-            Logging.Write(LogColor, $"[{Name}-v{Version}] Cleaning up migrated Llamalibrary misc. failed, delete LisbethVentures and FCBuffPlugin manually. {e}");
+            Logging.Write(LogColor, $"[{Name}-v{Version}] Cleaning up migrated LlamaLibrary misc. failed, delete LisbethVentures and FCBuffPlugin manually. {e}");
         }
 
         try
         {
-            if (System.IO.Directory.Exists($@"BotBases\LlamaLibrary"))
+            if (Directory.Exists($@"BotBases\LlamaLibrary"))
             {
                 for (int i = 0; i < repoDataSet.Tables["Repo"].Rows.Count; i++)
                 {
@@ -144,7 +140,7 @@ public class repoBuddy : BotPlugin
         }
         catch (Exception e)
         {
-            Logging.Write(LogColor, $"[{Name}-v{Version}] Archiving Llamalibrary failed, please backup and delete manually. {e}");
+            Logging.Write(LogColor, $"[{Name}-v{Version}] Archiving LlamaLibrary failed, please backup and delete manually. {e}");
         }
     }
 
@@ -154,7 +150,7 @@ public class repoBuddy : BotPlugin
         settingsForm.ShowDialog();
     }
 
-    public void GetrepoData()
+    public void GetRepoData()
     {
         if (!File.Exists(@"Plugins\repoBuddy\repoBuddyRepos.xml"))
         {
@@ -165,12 +161,12 @@ public class repoBuddy : BotPlugin
         repoDataSet.ReadXml(repoXML);
     }
 
-    public void GetddlData()
+    public void GetDdlData()
     {
         using (StreamReader file = File.OpenText(@"Plugins\repoBuddy\ddls.json"))
         {
             JsonSerializer serializer = new JsonSerializer();
-            ddlDict = (Dictionary<String, List<String>>)serializer.Deserialize(file, typeof(Dictionary<string, List<string>>));
+            ddlDict = (Dictionary<string, List<string>>)serializer.Deserialize(file, typeof(Dictionary<string, List<string>>));
         }
     }
 
@@ -193,8 +189,12 @@ public class repoBuddy : BotPlugin
         }
 
         AssemblyName asmName = new AssemblyName(args.Name);
+
         if (asmName.Name != "SharpSvn")
+        {
             return null;
+        }
+
         return Assembly.LoadFrom(path);
     }
 
@@ -221,7 +221,7 @@ public class repoBuddy : BotPlugin
         RBprocess.CloseMainWindow();
     }
 
-    public void WriteLog(List<String> array, String msg)
+    public void WriteLog(List<string> array, string msg)
     {
         array.Add(msg);
         Logging.Write(LogColor, msg);
@@ -257,7 +257,7 @@ public class repoBuddy : BotPlugin
             using (StreamReader file = File.OpenText(@"Plugins\repoBuddy\repoLog.json"))
             {
                 JsonSerializer serializer = new JsonSerializer();
-                repoLog = (List<String>)serializer.Deserialize(file, typeof(List<String>));
+                repoLog = (List<string>)serializer.Deserialize(file, typeof(List<string>));
 
                 foreach (string change in repoLog)
                 {
@@ -303,7 +303,7 @@ public class repoBuddy : BotPlugin
             {
                 using (SvnClient client = new SvnClient())
                 {
-                    if (System.IO.Directory.Exists($@"{repoPath}\.svn"))
+                    if (Directory.Exists($@"{repoPath}\.svn"))
                     {
                         Collection<SvnLogEventArgs> logitems;
 
@@ -329,7 +329,7 @@ public class repoBuddy : BotPlugin
 
                             foreach (var logentry in logitems)
                             {
-                                String logString = logentry.LogMessage.Replace(System.Environment.NewLine, " ");
+                                string logString = logentry.LogMessage.Replace(Environment.NewLine, " ");
                                 WriteLog(repoLog, $@"[{Name}-v{Version}] {repoName} r{logentry.Revision}: {logString}");
                             }
 
@@ -352,19 +352,19 @@ public class repoBuddy : BotPlugin
                     }
                 }
             }
-            catch (SharpSvn.SvnAuthenticationException e)
+            catch (SvnAuthenticationException e)
             {
                 WriteLog(repoLog, $"[{Name}-v{Version}] {repoName} No more credentials or we tried too many times. {e}");
             }
-            catch (System.AccessViolationException e)
+            catch (AccessViolationException e)
             {
                 WriteLog(repoLog, $"[{Name}-v{Version}] {repoName} Access Violation, something is locking the folder. {e}");
             }
-            catch (SharpSvn.SvnFileSystemException e)
+            catch (SvnFileSystemException e)
             {
                 WriteLog(repoLog, $"[{Name}-v{Version}] {repoName} FileSystemException, repo has probably been moved/deleted. {e}");
             }
-            catch (SharpSvn.SvnException e)
+            catch (SvnException e)
             {
                 WriteLog(repoLog, $"[{Name}-v{Version}] {repoName} Generic SvnException, do you have tortoiseSVN monitoring this folder? CN users may need a VPN to access GitHub. {e}");
 
@@ -487,7 +487,7 @@ public class Form1 : Form
     private TabControl tabControls = new TabControl();
     private DataSet repoDataSet = repoBuddy.repoDataSet;
     private string repoXML = repoBuddy.repoXML;
-    private Dictionary<String, List<String>> ddlDict = repoBuddy.ddlDict;
+    private Dictionary<string, List<string>> ddlDict = repoBuddy.ddlDict;
 
     private void SetupLayout()
     {
@@ -507,7 +507,7 @@ public class Form1 : Form
         nameBox.GotFocus += new EventHandler(NameBox_GotFocus);
         nameBox.LostFocus += new EventHandler(NameBox_LostFocus);
 
-        typeBox.Items.AddRange(new string[] {"BotBase", "Plugin", "Profile", "Routine", "Quest Behavior"});
+        typeBox.Items.AddRange(new string[] { "BotBase", "Plugin", "Profile", "Routine", "Quest Behavior" });
         typeBox.DropDownStyle = ComboBoxStyle.DropDownList;
         typeBox.SelectedIndex = 0;
 
