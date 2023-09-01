@@ -25,7 +25,6 @@ public class SettingsForm : Form
     private TabPage ddlTab = new TabPage();
     private TabControl tabControls = new TabControl();
     private DataSet repoDataSet = repoBuddy.repoDataSet;
-    private string repoXML = repoBuddy.repoXML;
     private Dictionary<string, List<string>> ddlDict = repoBuddy.ddlDict;
 
     private void SetupLayout()
@@ -189,7 +188,7 @@ public class SettingsForm : Form
 
     private void Form1_Unload(object sender, FormClosingEventArgs e)
     {
-        repoDataSet.WriteXml(repoXML);
+        repoDataSet.WriteXml(Constants.ReposXmlPath);
     }
 
     private void textBox_KeyPress(object sender, KeyPressEventArgs e)

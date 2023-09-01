@@ -30,12 +30,11 @@ public class repoBuddy : BotPlugin
     public override string Name => "repoBuddy";
 #endif
     public override string Author => "Zimble";
-    public override Version Version => new Version(1, 11);
+    public override Version Version => new Version(1, 12);
     public override string Description => "Automatically update RB accessories from repositories";
     public override bool WantButton => true;
     public override string ButtonText => "Settings";
     public static DataSet repoDataSet = new DataSet();
-    public static string repoXML => Path.Combine(SourceDirectory().FullName, "repoBuddyRepos.xml");
     private static Color LogColor = Colors.Wheat;
     public bool restartNeeded = false;
     public static List<string> repoLog = new List<string>();
@@ -60,20 +59,6 @@ public class repoBuddy : BotPlugin
     {
         GetRepoData();
         GetDdlData();
-    }
-
-    [MethodImpl(MethodImplOptions.NoInlining)]
-    public static DirectoryInfo SourceDirectory()
-    {
-        var frame = new StackFrame(0, true);
-        var file = frame.GetFileName();
-
-        if (!string.IsNullOrEmpty(file) && File.Exists(file))
-        {
-            return new DirectoryInfo(Path.GetDirectoryName(file));
-        }
-
-        return null;
     }
 
     public void MigrateLlamaLibrary()
@@ -107,7 +92,7 @@ public class repoBuddy : BotPlugin
                 //restartNeeded = true;
             }
 
-            repoDataSet.WriteXml(repoXML);
+            repoDataSet.WriteXml(Constants.ReposXmlPath);
         }
         catch (Exception e)
         {
@@ -131,7 +116,7 @@ public class repoBuddy : BotPlugin
                     }
                 }
 
-                repoDataSet.WriteXml(repoXML);
+                repoDataSet.WriteXml(Constants.ReposXmlPath);
                 //restartNeeded = true;
                 ZipFolder($@"BotBases\LlamaLibrary", $@"BotBases\LlamaLibrary_{DateTime.Now.Ticks}.zip");
                 Directory.Delete($@"BotBases\LlamaLibrary", true);
@@ -151,18 +136,18 @@ public class repoBuddy : BotPlugin
 
     public void GetRepoData()
     {
-        if (!File.Exists(@"Plugins\repoBuddy\repoBuddyRepos.xml"))
+        if (!File.Exists(Constants.ReposXmlPath))
         {
-            File.Copy(@"Plugins\repoBuddy\Default.repoBuddyRepos.xml", @"Plugins\repoBuddy\repoBuddyRepos.xml");
+            File.Copy(Constants.DefaultReposXmlPath, Constants.ReposXmlPath);
         }
 
         repoDataSet.Clear();
-        repoDataSet.ReadXml(repoXML);
+        repoDataSet.ReadXml(Constants.ReposXmlPath);
     }
 
     public void GetDdlData()
     {
-        using (StreamReader file = File.OpenText(@"Plugins\repoBuddy\ddls.json"))
+        using (StreamReader file = File.OpenText(Constants.DdlsJsonPath))
         {
             JsonSerializer serializer = new JsonSerializer();
             ddlDict = (Dictionary<string, List<string>>)serializer.Deserialize(file, typeof(Dictionary<string, List<string>>));
@@ -176,7 +161,7 @@ public class repoBuddy : BotPlugin
 
     private static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args) //force load sharpsvn
     {
-        string path = @"Plugins\repoBuddy\SharpSvn.dll";
+        string path = Constants.SharpSvnDllPath;
 
         try
         {
@@ -216,7 +201,7 @@ public class repoBuddy : BotPlugin
         //}
 
         Process RBprocess = Process.GetCurrentProcess();
-        Process.Start(@"Plugins\repoBuddy\watchdog.bat", $"{RBprocess.Id} {ff14bot.Core.Memory.Process.Id}");
+        Process.Start(Constants.WatchdogBatPath, $"{RBprocess.Id} {ff14bot.Core.Memory.Process.Id}");
         RBprocess.CloseMainWindow();
     }
 
@@ -380,7 +365,7 @@ public class repoBuddy : BotPlugin
 
         if (repoLog.Count > 0)
         {
-            using (StreamWriter file = File.CreateText(@"Plugins\repoBuddy\repoLog.json"))
+            using (StreamWriter file = File.CreateText(Constants.RepoLogJsonPath))
             {
                 JsonSerializer serializer = new JsonSerializer();
                 serializer.Serialize(file, repoLog);
