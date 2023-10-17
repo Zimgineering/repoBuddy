@@ -59,6 +59,11 @@
 		"https://sts.llamamagic.net/MandervilleWeapons/MandervilleWeapons.zip",
 		"Paid plugin that will obtain the level 90 DoW relic weapons."
 	],
+	"PandaFarmer": [
+		"Plugins\\PandaFarmer",
+		"https://sts.llamamagic.net/PandaFarmer/PandaFarmer.zip",
+		"Paid plugin that will farm dungeons for you and level characters."
+	],
 	"SplendorousTools": [
 		"Plugins\\SplendorousTools",
 		"https://sts.llamamagic.net/SplendorousTools/SplendorousTools.zip",
