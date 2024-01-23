@@ -1,3 +1,5 @@
+# RepoBuddy is no longer working or supported, please try [UpdateBuddy](https://loader.updatebuddy.net/UpdateBuddy.zip) instead! (beta at this time, seek support in Project BR discord)
+
 # repoBuddy
 
 A RebornBuddy plugin that automatically updates add-ons from configured repositories.
